@@ -1,16 +1,21 @@
-import Input from "@/components/atoms/Input";
+import Icon from "@/components/atoms/Icon";
 import Layout from "@/components/Layout";
 
 function App() {
   return (
     <Layout>
       <div className="flex flex-col space-y-4">
-        <Input.SubTitle />
-        <Input.Title />
-        <Input.Description placeholder="장문형 텍스트" />
-        <Input.SubTitle disabled />
-        <Input.Title disabled />
-        <Input.Description disabled placeholder="장문형 텍스트" />
+        <Icon type="arrow-down-dropbox-circle" />
+        <Icon type="short-text" />
+        <Icon type="long-text" />
+        <Icon type="check-box" />
+        <Icon type="radio-button" />
+        <Icon type="delete" />
+        <Icon type="content-copy" />
+        <Icon type="arrow-drop-up" />
+        <Icon type="arrow-drop-down" />
+        <Icon type="arrow-drop-down-circle" />
+        <Icon type="add-circle" />
       </div>
     </Layout>
   );
