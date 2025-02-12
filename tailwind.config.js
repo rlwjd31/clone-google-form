@@ -8,6 +8,7 @@ export default {
         "purple-primary": "#673AB7",
         "purple-secondary": "#F0EBF8",
         card: "#FFFFFF",
+        "blue-primary": "#4285f4",
       },
       backgroundImage: {
         "dot-pattern": "radial-gradient(circle, black 1px, transparent 1px)",
