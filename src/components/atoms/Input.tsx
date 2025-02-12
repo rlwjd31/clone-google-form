@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { ComponentProps, FC, ReactNode } from "react";
+import { ComponentProps, FC, KeyboardEvent, ReactNode } from "react";
 
 type InputProps = ComponentProps<"input"> & {
   className?: string;
@@ -10,6 +10,12 @@ const defaultInputStyle = "size-full focus:outline-none";
 const underlineNeuralStyle = "absolute bottom-0 w-full h-px bg-neutral-500";
 const underlinePurpleStyle =
   "absolute w-full scale-0 bottom-0 translate-[-50%] h-[2px] transition-all duration-200 bg-purple-primary group-focus-within:scale-100";
+
+const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+  }
+};
 
 function InputContainer({
   className,
@@ -38,7 +44,11 @@ export default function Input({
 }: InputProps) {
   return (
     <InputContainer className={className}>
-      <input className={cn(defaultInputStyle, inputStyle)} {...others} />
+      <input
+        onKeyDown={handleKeyDown}
+        className={cn(defaultInputStyle, inputStyle)}
+        {...others}
+      />
     </InputContainer>
   );
 }
@@ -59,8 +69,9 @@ const Title: FC<InputProps> = ({
           disabled && "bg-card",
           inputStyle
         )}
-        {...others}
         disabled={disabled}
+        onKeyDown={handleKeyDown}
+        {...others}
       />
       {!disabled && <UnderlineNeutral />}
       {!disabled && <UnderlinePurple />}
@@ -85,6 +96,7 @@ const SubTitle: FC<InputProps> = ({
           inputStyle
         )}
         disabled={disabled}
+        onKeyDown={handleKeyDown}
         {...others}
       />
       {!disabled && <UnderlineNeutral />}
