@@ -1,20 +1,11 @@
-import Input from "@/components/atoms/Input";
 import Layout from "@/components/Layout";
-import ButtonIcon from "@/components/molecules/ButtonIcon";
-import Card from "@/components/molecules/Card";
+import Dropdown from "@/components/organisms/Dropdown";
 
 function App() {
   return (
     <Layout>
       <div className="flex w-full flex-col gap-4">
-        <Card>
-          <Input.SubTitle />
-          <ButtonIcon iconType="close" />
-        </Card>
-        <Card>
-          <Input.SubTitle />
-          <ButtonIcon iconType="close" />
-        </Card>
+        <Dropdown />
       </div>
     </Layout>
   );
