@@ -1,6 +1,18 @@
+import Input from "@/components/atoms/Input";
+import Layout from "@/components/Layout";
+
 function App() {
   return (
-    <h1 className="text-3xl font-bold text-red-500 underline">Hello world!</h1>
+    <Layout>
+      <div className="flex flex-col space-y-4">
+        <Input.SubTitle />
+        <Input.Title />
+        <Input.Description placeholder="장문형 텍스트" />
+        <Input.SubTitle disabled />
+        <Input.Title disabled />
+        <Input.Description disabled placeholder="장문형 텍스트" />
+      </div>
+    </Layout>
   );
 }
 
