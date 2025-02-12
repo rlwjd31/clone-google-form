@@ -10,6 +10,7 @@ import ArrowDropDown from "@/assets/icons/arrow-drop-down.svg?react";
 import ArrowDropDownCircle from "@/assets/icons/arrow-drop-down-circle.svg?react";
 import AddCircle from "@/assets/icons/add-circle.svg?react";
 import Close from "@/assets/icons/close.svg?react";
+import DragIndicator from "@/assets/icons/drag-indicator.svg?react";
 
 import { FC, SVGProps } from "react";
 
@@ -25,38 +26,44 @@ export type IconType =
   | "arrow-drop-down"
   | "arrow-drop-down-circle"
   | "add-circle"
-  | "close";
+  | "close"
+  | "drag-indicator";
 
 type IconProps = {
   [key in IconType]: {
     component: FC<SVGProps<SVGSVGElement>>;
-    tooltipInfo?: string;
+    text?: string;
   };
 };
 
 export const IconSVG: IconProps = {
   "short-text": {
     component: ShortText,
+    text: "단답형"
   },
   "long-text": {
     component: LongText,
+    text: "장문형"
   },
   "radio-button": {
     component: RadionButton,
+    text: "객관식"
   },
   "check-box": {
     component: Checkbox,
+    text: "체크박스"
   },
   "arrow-down-dropbox-circle": {
     component: ArrowDownDropboxCircle,
+    text: "드롭다운"
   },
   delete: {
     component: Delete,
-    tooltipInfo: "질문 삭제",
+    text: "질문 삭제",
   },
   "content-copy": {
     component: ContentCopy,
-    tooltipInfo: "질문 복사",
+    text: "질문 복사",
   },
   "arrow-drop-up": {
     component: ArrowDropUp,
@@ -66,14 +73,18 @@ export const IconSVG: IconProps = {
   },
   "arrow-drop-down-circle": {
     component: ArrowDropDownCircle,
+    text: "드롭다운"
   },
   "add-circle": {
     component: AddCircle,
-    tooltipInfo: "질문 추가",
+    text: "질문 추가",
   },
   close: {
     component: Close,
-    tooltipInfo: "삭제"
+    text: "삭제",
+  },
+  "drag-indicator": {
+    component: DragIndicator,
   },
 };
 
