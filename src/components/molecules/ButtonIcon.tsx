@@ -1,4 +1,4 @@
-import Icon, { IconSVG, IconType } from "@/components/atoms/Icon";
+import Icon, { IconInfo, IconType } from "@/components/atoms/Icon";
 import { cn } from "@/utils/cn";
 import { ComponentProps } from "react";
 import ToolTip from "@/components/atoms/ToolTip";
@@ -14,7 +14,8 @@ export default function ButtonIcon({
   iconType,
   visibleToolTip = false,
 }: ButtonIconProps) {
-  const iconInfoText = IconSVG[iconType].text;
+  const iconInfoText = IconInfo[iconType].text;
+
   return (
     <div className="group relative">
       <button
