@@ -1,4 +1,5 @@
 import Checkbox from "@/components/atoms/Checkbox";
+import Icon from "@/components/atoms/Icon";
 import Input from "@/components/atoms/Input";
 import ButtonIcon from "@/components/molecules/ButtonIcon";
 import { cn } from "@/utils/cn";
@@ -21,7 +22,10 @@ export default function CheckboxOption({
   ...others
 }: CheckboxOptionProps) {
   return (
-    <div className="flex w-full items-center gap-2">
+    <div className="relative flex items-center w-full gap-2" draggable>
+      <div className="absolute transition-all duration-100 -translate-x-4 opacity-0 cursor-move hover:opacity-100">
+        <Icon type="drag-indicator" />
+      </div>
       <div
         className={cn(
           "flex w-full cursor-pointer items-center gap-2 py-1",

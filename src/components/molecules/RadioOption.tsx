@@ -1,3 +1,4 @@
+import Icon from "@/components/atoms/Icon";
 import Input from "@/components/atoms/Input";
 import Radio from "@/components/atoms/Radio";
 import ButtonIcon from "@/components/molecules/ButtonIcon";
@@ -21,7 +22,10 @@ export default function RadioOption({
   ...others
 }: RadioOptionProps) {
   return (
-    <div className="flex w-full items-center gap-2">
+    <div className="relative flex w-full items-center gap-2" draggable>
+      <div className="absolute -translate-x-4 cursor-move opacity-0 transition-all duration-100 hover:opacity-100">
+        <Icon type="drag-indicator" />
+      </div>
       <div
         className={cn(
           "flex w-full cursor-pointer items-center gap-2 py-1",
