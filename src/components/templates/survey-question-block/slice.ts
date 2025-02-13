@@ -1,13 +1,9 @@
 import { QuestionType } from "@/types/question.type";
-import {
-  configureStore,
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Questions<T extends QuestionType> = T extends
   | "check-box"
-  | "radio"
+  | "radio-button"
   | "dropdown"
   ? string[]
   : string;
@@ -24,7 +20,11 @@ const getInitialState = <T extends QuestionType>(
 ): SurveyQuestionBlockState<T> => {
   return {
     questionTitle: "",
-    questions: (type === "check-box" ? [] : "") as Questions<T>,
+    questions: (type === "check-box" ||
+    type === "radio-button" ||
+    type === "arrow-drop-down-circle"
+      ? [""]
+      : "") as Questions<T>,
     questionType: type,
     isRequired: false,
   };
@@ -78,4 +78,4 @@ export type LocalStateType = ReturnType<
   typeof SurveyQuestionBlockStore.getState
 >;
 
-export type LocalStateActionType = typeof SurveyQuestionBlockStore.dispatch
+export type LocalStateActionType = typeof SurveyQuestionBlockStore.dispatch;
