@@ -26,9 +26,8 @@ export default function Dropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDropdownIconType, setSelectedDropdownIconType] =
     useState<DropdownItemIconType>("short-text");
+  const DROPDOWN_ITEM_HEIGHT = 48;
   useClickOutside(dropdownRef, () => setIsOpen(false));
-
-  // TODO: 위치기반 dropdown 구현"editor.formatOnType": false,
 
   return (
     <div className="relative w-fit " ref={dropdownRef}>
@@ -48,7 +47,15 @@ export default function Dropdown() {
         </div>
       </div>
       {isOpen && (
-        <div className="absolute rounded-md border border-gray-300 bg-card shadow-lg">
+        <div
+          className="absolute z-20 rounded-md border border-gray-300 bg-card shadow-lg"
+          style={{
+            transform: `translateY(-${
+              (dropdownItemsContent.indexOf(selectedDropdownIconType) + 1) *
+              DROPDOWN_ITEM_HEIGHT
+            }px)`,
+          }}
+        >
           <ul className="flex w-full flex-col">
             {dropdownItemsContent.map((iconType, index) => {
               return (
@@ -88,7 +95,7 @@ function DropdownItem({
       className={cn(
         "flex list-none justify-between gap-3 p-3 cursor-pointer",
         isActivated && "bg-blue-primary/10 hover:bg-blue-primary/5",
-        !isActivated && "hover:bg-neutral-100",
+        !isActivated && "hover:bg-neutral-100 active:bg-neutral-200",
         className
       )}
       {...others}
