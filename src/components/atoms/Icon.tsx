@@ -11,6 +11,7 @@ import ArrowDropDownCircle from "@/assets/icons/arrow-drop-down-circle.svg?react
 import AddCircle from "@/assets/icons/add-circle.svg?react";
 import Close from "@/assets/icons/close.svg?react";
 import DragIndicator from "@/assets/icons/drag-indicator.svg?react";
+import Check from "@/assets/icons/check.svg?react";
 
 export const IconInfo = {
   "short-text": {
@@ -63,6 +64,10 @@ export const IconInfo = {
   },
   "drag-indicator": {
     component: DragIndicator,
+    text: "",
+  },
+  check: {
+    component: Check,
     text: "",
   },
 } as const;
