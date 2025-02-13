@@ -1,6 +1,13 @@
+import Layout from "@/components/Layout";
+import Dropdown from "@/components/organisms/Dropdown";
+
 function App() {
   return (
-    <h1 className="text-3xl font-bold text-red-500 underline">Hello world!</h1>
+    <Layout>
+      <div className="flex w-full flex-col gap-4">
+        <Dropdown />
+      </div>
+    </Layout>
   );
 }
 
