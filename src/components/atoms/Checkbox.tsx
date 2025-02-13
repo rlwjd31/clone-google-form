@@ -2,7 +2,7 @@ import Icon from "@/components/atoms/Icon";
 import { cn } from "@/utils/cn";
 import { ComponentProps } from "react";
 
-type CheckBoxProps = ComponentProps<"div"> & {
+type CheckBoxProps = ComponentProps<"button"> & {
   className?: string;
   isActivated?: boolean;
 };
@@ -10,14 +10,20 @@ type CheckBoxProps = ComponentProps<"div"> & {
 export default function Checkbox({
   className,
   isActivated = false,
+  onClick,
+  disabled,
+  ...others
 }: CheckBoxProps) {
   return (
     <>
-      <div
+      <button
         className={cn(
-          "grid shrink-0 grid-cols-1 size-10 rounded-full group grid-rows-1 gap-2 place-items-center hover:bg-purple-secondary",
+          "grid shrink-0 grid-cols-1 size-10 rounded-full group grid-rows-1 gap-2 place-items-center",
+          !disabled && "hover:bg-purple-secondary",
           className
         )}
+        onClick={disabled ? () => {} : onClick}
+        {...others}
       >
         <span
           className={cn(
@@ -36,7 +42,7 @@ export default function Checkbox({
         <div className={cn("z-20 col-start-1 row-start-1")}>
           <Icon type="check" />
         </div>
-      </div>
+      </button>
     </>
   );
 }

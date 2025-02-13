@@ -1,18 +1,27 @@
 import { cn } from "@/utils/cn";
 import { ComponentProps } from "react";
 
-type RadioProps = ComponentProps<"div"> & {
+type RadioProps = ComponentProps<"button"> & {
   className?: string;
   isActivated?: boolean;
 };
 
-export default function Radio({ className, isActivated = false }: RadioProps) {
+export default function Radio({
+  className,
+  isActivated = false,
+  onClick,
+  disabled,
+  ...others
+}: RadioProps) {
   return (
-    <div
+    <button
       className={cn(
-        "grid size-10 shrink-0 grid-cols-1 rounded-full group grid-rows-1 gap-2 place-items-center hover:bg-purple-secondary",
+        "grid size-10 shrink-0 grid-cols-1 rounded-full group grid-rows-1 gap-2 place-items-center",
+        !disabled && "hover:bg-purple-secondary",
         className
       )}
+      onClick={disabled ? () => {} : onClick}
+      {...others}
     >
       <span className="z-10 col-start-1 row-start-1 size-5 rounded-full border-2 border-neutral-400" />
       <span
@@ -27,6 +36,6 @@ export default function Radio({ className, isActivated = false }: RadioProps) {
           isActivated ? "animate-scaleUp" : "animate-scaleDown"
         )}
       />
-    </div>
+    </button>
   );
 }

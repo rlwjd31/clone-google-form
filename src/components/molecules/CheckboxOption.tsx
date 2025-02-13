@@ -9,7 +9,7 @@ type CheckboxOptionProps = ComponentProps<"div"> & {
   defaultValue: string;
   isActivated: boolean;
   onClickDeleteHandler: () => void;
-  onClickHandler: MouseEventHandler<HTMLDivElement>;
+  onClickHandler: MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function CheckboxOption({
@@ -21,16 +21,15 @@ export default function CheckboxOption({
   ...others
 }: CheckboxOptionProps) {
   return (
-    <div className="flex items-center w-full gap-2">
+    <div className="flex w-full items-center gap-2">
       <div
         className={cn(
           "flex w-full cursor-pointer items-center gap-2 py-1",
           className
         )}
-        onClick={onClickHandler}
         {...others}
       >
-        <Checkbox isActivated={isActivated} />
+        <Checkbox disabled isActivated={isActivated} onClick={onClickHandler} />
         <Input.SubTitle
           inputStyle="py-3 hover:bg-card text-sm bg-card px-0"
           defaultValue={defaultValue}
@@ -44,4 +43,3 @@ export default function CheckboxOption({
     </div>
   );
 }
-

@@ -9,7 +9,7 @@ type RadioOptionProps = ComponentProps<"div"> & {
   defaultValue: string;
   isActivated: boolean;
   onClickDeleteHandler: () => void;
-  onClickHandler: MouseEventHandler<HTMLDivElement>;
+  onClickHandler: MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function RadioOption({
@@ -27,10 +27,9 @@ export default function RadioOption({
           "flex w-full cursor-pointer items-center gap-2 py-1",
           className
         )}
-        onClick={onClickHandler}
         {...others}
       >
-        <Radio isActivated={isActivated} />
+        <Radio isActivated={isActivated} disabled onClick={onClickHandler} />
         <Input.SubTitle
           inputStyle="py-3 hover:bg-card text-sm bg-card px-0"
           defaultValue={defaultValue}
