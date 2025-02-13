@@ -1,7 +1,6 @@
 import {
   useRef,
   useState,
-  useEffect,
   FunctionComponent,
   SVGProps,
   ComponentProps,
@@ -9,6 +8,7 @@ import {
 
 import Icon, { IconInfo, IconType } from "@/components/atoms/Icon";
 import { cn } from "@/utils/cn";
+import useClickOutside from "@/hooks/useClickOustside";
 
 type DropdownItemIconType = Extract<
   IconType,
@@ -28,7 +28,7 @@ export default function Dropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedText, setSelectedText] =
     useState<DropdownItemType[DropdownItemIconType]["text"]>("객관식");
-
+  useClickOutside(dropdownRef, () => setIsOpen(false));
   const dropdownItemsContent: DropdownItemIconType[] = [
     "short-text",
     "long-text",
@@ -42,25 +42,11 @@ export default function Dropdown() {
     Component: IconInfo[iconType].component,
     text: IconInfo[iconType].text,
   }));
-  console.log(dropdownItemsInfo);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
+  // TODO: actived되지 않은 item은 가운데에서 동그랗게 배경이 채워지는 animation구현
+  // TODO: selectedText가 아닌 DropdownItem에 전달될 type으로 정의하되 state에 IconComponent를 담지 않고 참조 및 조건을 걸어서 저장
+  // TODO: useClickOutside hook 리팩토링
+  // TODO: 위치기반 dropdown 구현"editor.formatOnType": false,
 
   return (
     <div className="relative w-fit " ref={dropdownRef}>
