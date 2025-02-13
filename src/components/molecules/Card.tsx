@@ -16,7 +16,7 @@ export default function Card({ className, children }: CardProps) {
   return (
     <div
       className={cn(
-        "flex relative w-full flex-col bg-card px-6 max-w-[48rem] rounded-lg overflow-hidden",
+        "flex relative w-full flex-col bg-card px-6 max-w-[48rem] rounded-lg",
         className
       )}
       ref={cardRef}
@@ -32,7 +32,7 @@ export default function Card({ className, children }: CardProps) {
       {children}
       {/* 해당 card의 내부의 요소가 focus중일 때 좌측에 나타나는 파란 선 */}
       {isCardFocused && (
-        <div className="absolute left-0 z-10 h-full w-[6px] bg-blue-primary" />
+        <div className="absolute left-0 z-10 h-full w-[6px] rounded-l-full bg-blue-primary" />
       )}
     </div>
   );
