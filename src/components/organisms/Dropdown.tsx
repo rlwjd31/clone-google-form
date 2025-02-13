@@ -3,17 +3,9 @@ import { useRef, useState, ComponentProps } from "react";
 import Icon, { IconInfo, IconType } from "@/components/atoms/Icon";
 import { cn } from "@/utils/cn";
 import useClickOutside from "@/hooks/useClickOustside";
+import { QuestionType } from "@/types/question.type";
 
-type DropdownItemIconType = Extract<
-  IconType,
-  | "short-text"
-  | "long-text"
-  | "radio-button"
-  | "check-box"
-  | "arrow-drop-down-circle"
->;
-
-const dropdownItemsContent: DropdownItemIconType[] = [
+const dropdownItemsContent: QuestionType[] = [
   "short-text",
   "long-text",
   "radio-button",
@@ -25,12 +17,12 @@ export default function Dropdown() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDropdownIconType, setSelectedDropdownIconType] =
-    useState<DropdownItemIconType>("short-text");
+    useState<QuestionType>("short-text");
   const DROPDOWN_ITEM_HEIGHT = 48;
   useClickOutside(dropdownRef, () => setIsOpen(false));
 
   return (
-    <div className="relative w-fit " ref={dropdownRef}>
+    <div className="relative w-fit" ref={dropdownRef}>
       <div className="relative w-fit">
         <DropdownItem
           className="rounded-md border border-neutral-300 bg-card hover:bg-card"
@@ -48,11 +40,12 @@ export default function Dropdown() {
       </div>
       {isOpen && (
         <div
-          className="absolute z-20 rounded-md border border-gray-300 bg-card shadow-lg"
+          className="absolute z-20 rounded-md border border-gray-300 bg-card py-2 shadow-lg"
           style={{
             transform: `translateY(-${
               (dropdownItemsContent.indexOf(selectedDropdownIconType) + 1) *
-              DROPDOWN_ITEM_HEIGHT
+                DROPDOWN_ITEM_HEIGHT +
+              10
             }px)`,
           }}
         >
