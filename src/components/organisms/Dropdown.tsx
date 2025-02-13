@@ -1,10 +1,4 @@
-import {
-  useRef,
-  useState,
-  FunctionComponent,
-  SVGProps,
-  ComponentProps,
-} from "react";
+import { useRef, useState, ComponentProps } from "react";
 
 import Icon, { IconInfo, IconType } from "@/components/atoms/Icon";
 import { cn } from "@/utils/cn";
@@ -19,33 +13,21 @@ type DropdownItemIconType = Extract<
   | "arrow-drop-down-circle"
 >;
 
-type DropdownItemType = {
-  [K in DropdownItemIconType]: (typeof IconInfo)[K];
-};
+const dropdownItemsContent: DropdownItemIconType[] = [
+  "short-text",
+  "long-text",
+  "radio-button",
+  "check-box",
+  "arrow-drop-down-circle",
+];
 
 export default function Dropdown() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedText, setSelectedText] =
-    useState<DropdownItemType[DropdownItemIconType]["text"]>("객관식");
+  const [selectedDropdownIconType, setSelectedDropdownIconType] =
+    useState<DropdownItemIconType>("short-text");
   useClickOutside(dropdownRef, () => setIsOpen(false));
-  const dropdownItemsContent: DropdownItemIconType[] = [
-    "short-text",
-    "long-text",
-    "radio-button",
-    "check-box",
-    "arrow-drop-down-circle",
-  ];
 
-  const dropdownItemsInfo = dropdownItemsContent.map((iconType) => ({
-    iconType,
-    Component: IconInfo[iconType].component,
-    text: IconInfo[iconType].text,
-  }));
-
-  // TODO: actived되지 않은 item은 가운데에서 동그랗게 배경이 채워지는 animation구현
-  // TODO: selectedText가 아닌 DropdownItem에 전달될 type으로 정의하되 state에 IconComponent를 담지 않고 참조 및 조건을 걸어서 저장
-  // TODO: useClickOutside hook 리팩토링
   // TODO: 위치기반 dropdown 구현"editor.formatOnType": false,
 
   return (
@@ -53,11 +35,7 @@ export default function Dropdown() {
       <div className="relative w-fit">
         <DropdownItem
           className="rounded-md border border-neutral-300 bg-card hover:bg-card"
-          IconComponent={
-            dropdownItemsInfo.filter((item) => item.text === selectedText)[0]
-              .Component
-          }
-          text={selectedText}
+          iconType={selectedDropdownIconType}
           onClick={() => setIsOpen((prev) => !prev)}
         />
         <div
@@ -72,23 +50,20 @@ export default function Dropdown() {
       {isOpen && (
         <div className="absolute rounded-md border border-gray-300 bg-card shadow-lg">
           <ul className="flex w-full flex-col">
-            {dropdownItemsInfo.map(
-              ({ iconType, text, Component: IconComponent }, index) => {
-                return (
-                  <li key={`${iconType}-${index}`}>
-                    <DropdownItem
-                      isActivated={selectedText === text}
-                      IconComponent={IconComponent}
-                      text={text}
-                      onClick={() => {
-                        setSelectedText(text);
-                        setIsOpen(false);
-                      }}
-                    />
-                  </li>
-                );
-              }
-            )}
+            {dropdownItemsContent.map((iconType, index) => {
+              return (
+                <li key={`${iconType}-${index}`}>
+                  <DropdownItem
+                    isActivated={selectedDropdownIconType === iconType}
+                    iconType={iconType}
+                    onClick={() => {
+                      setSelectedDropdownIconType(iconType);
+                      setIsOpen(false);
+                    }}
+                  />
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
@@ -99,15 +74,13 @@ export default function Dropdown() {
 type DropdownItemProps = ComponentProps<"button"> & {
   isActivated?: boolean;
   className?: string;
-  IconComponent: FunctionComponent<SVGProps<SVGSVGElement>>;
-  text: string;
+  iconType: IconType;
 };
 
 function DropdownItem({
   className,
   isActivated,
-  IconComponent,
-  text,
+  iconType,
   ...others
 }: DropdownItemProps) {
   return (
@@ -120,8 +93,8 @@ function DropdownItem({
       )}
       {...others}
     >
-      <IconComponent />
-      <p className="w-[8.5rem] text-start">{text}</p>
+      <Icon type={iconType} />
+      <p className="w-[8.5rem] text-start">{IconInfo[iconType].text}</p>
     </button>
   );
 }
