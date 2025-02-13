@@ -8,19 +8,23 @@ import {
   SetStateAction,
 } from "react";
 
-type SurveyQuestionBlockState = {
+type Questions<T extends QuestionType> = T extends "check-box"
+  ? string[]
+  : string;
+
+type SurveyQuestionBlockState<T extends QuestionType> = {
   questionTitle: string;
   setQuestionTitle: Dispatch<SetStateAction<string>>;
-  questions: string[] | string;
-  setQuestions: Dispatch<SetStateAction<string[] | string>>;
-  questionType: QuestionType;
+  questions: Questions<T>;
+  setQuestions: Dispatch<SetStateAction<Questions<T>>>;
+  questionType: T;
   isRequired: boolean;
   setIsRequired: Dispatch<SetStateAction<boolean>>;
-  setQuestionType: (type: QuestionType) => void;
+  setQuestionType: (type: T) => void;
 };
 
 const SurveyQuestionBlockContext =
-  createContext<SurveyQuestionBlockState | null>(null);
+  createContext<SurveyQuestionBlockState<QuestionType> | null>(null);
 
 export function SurveyQuestionBlockProvider({
   children,
@@ -50,12 +54,14 @@ export function SurveyQuestionBlockProvider({
   );
 }
 
-export const useSurveyQuestionBlock = (): SurveyQuestionBlockState => {
+export const useSurveyQuestionBlock = <
+  T extends QuestionType
+>(): SurveyQuestionBlockState<T> => {
   const context = useContext(SurveyQuestionBlockContext);
   if (!context) {
     throw new Error(
       "useSurveyQuestionBlock must be used within a SurveyQuestionBlockProvider"
     );
   }
-  return context;
+  return context as unknown as SurveyQuestionBlockState<T>;
 };
