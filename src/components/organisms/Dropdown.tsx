@@ -13,21 +13,91 @@ const dropdownItemsContent: QuestionType[] = [
   "arrow-drop-down-circle",
 ];
 
-export default function Dropdown() {
+type DropdownProps = ComponentProps<"div"> & {
+  className?: string;
+  contents?: string[];
+  setValue: (value: string | QuestionType) => void;
+};
+
+export default function Dropdown({
+  contents,
+  className,
+  setValue,
+}: DropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDropdownIconType, setSelectedDropdownIconType] =
-    useState<QuestionType>("short-text");
+  const [selectedDropdownValue, setSelectedDropdownValue] =
+    useState("short-text");
   const DROPDOWN_ITEM_HEIGHT = 48;
   useClickOutside(dropdownRef, () => setIsOpen(false));
 
+  if (!contents)
+    return (
+      <div className={cn("relative w-fit", className)} ref={dropdownRef}>
+        <div className="relative w-fit">
+          <DropdownItem
+            className="border rounded-md border-neutral-300 bg-card hover:bg-card"
+            iconType={selectedDropdownValue as QuestionType}
+            onClick={() => setIsOpen((prev) => !prev)}
+          />
+          <div
+            className={cn(
+              "absolute right-3 top-1/2 z-10 -translate-y-1/2 transition-all duration-300",
+              isOpen && "rotate-180"
+            )}
+          >
+            <Icon type="arrow-drop-down" />
+          </div>
+        </div>
+        {isOpen && (
+          <div
+            className="absolute z-20 py-2 border border-gray-300 rounded-md shadow-lg bg-card"
+            style={{
+              transform: `translateY(-${
+                (dropdownItemsContent.indexOf(
+                  selectedDropdownValue as QuestionType
+                ) +
+                  1) *
+                  DROPDOWN_ITEM_HEIGHT +
+                10
+              }px)`,
+            }}
+          >
+            <ul className="flex flex-col w-full">
+              {dropdownItemsContent.map((iconType, index) => {
+                return (
+                  <li key={`${iconType}-${index}`}>
+                    <DropdownItem
+                      isActivated={selectedDropdownValue === iconType}
+                      iconType={iconType}
+                      onClick={() => {
+                        setSelectedDropdownValue(iconType);
+                        if (setValue) {
+                          setValue(iconType);
+                        }
+                        setIsOpen(false);
+                      }}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+
   return (
-    <div className="relative w-fit" ref={dropdownRef}>
+    <div className={cn("relative w-fit", className)} ref={dropdownRef}>
       <div className="relative w-fit">
         <DropdownItem
-          className="rounded-md border border-neutral-300 bg-card hover:bg-card"
-          iconType={selectedDropdownIconType}
+          className="rounded-md border border-neutral-300 bg-card hover:bg-card [&_p]:text-neutral-600"
           onClick={() => setIsOpen((prev) => !prev)}
+          text={
+            selectedDropdownValue === "short-text"
+              ? "선택"
+              : selectedDropdownValue
+          }
         />
         <div
           className={cn(
@@ -40,26 +110,29 @@ export default function Dropdown() {
       </div>
       {isOpen && (
         <div
-          className="absolute z-20 rounded-md border border-gray-300 bg-card py-2 shadow-lg"
+          className="absolute z-20 py-2 border border-gray-300 rounded-md shadow-lg bg-card"
           style={{
             transform: `translateY(-${
-              (dropdownItemsContent.indexOf(selectedDropdownIconType) + 1) *
+              (contents.indexOf(selectedDropdownValue) + 1) *
                 DROPDOWN_ITEM_HEIGHT +
               10
             }px)`,
           }}
         >
-          <ul className="flex w-full flex-col">
-            {dropdownItemsContent.map((iconType, index) => {
+          <ul className="flex flex-col w-full">
+            {contents.map((content, index) => {
               return (
-                <li key={`${iconType}-${index}`}>
+                <li key={`${content}-${index}`}>
                   <DropdownItem
-                    isActivated={selectedDropdownIconType === iconType}
-                    iconType={iconType}
+                    isActivated={selectedDropdownValue === content}
                     onClick={() => {
-                      setSelectedDropdownIconType(iconType);
+                      setSelectedDropdownValue(content);
+                      if (setValue) {
+                        setValue(content);
+                      }
                       setIsOpen(false);
                     }}
+                    text={content}
                   />
                 </li>
               );
@@ -74,13 +147,15 @@ export default function Dropdown() {
 type DropdownItemProps = ComponentProps<"button"> & {
   isActivated?: boolean;
   className?: string;
-  iconType: IconType;
+  iconType?: IconType;
+  text?: string;
 };
 
 function DropdownItem({
   className,
   isActivated,
   iconType,
+  text,
   ...others
 }: DropdownItemProps) {
   return (
@@ -93,8 +168,11 @@ function DropdownItem({
       )}
       {...others}
     >
-      <Icon type={iconType} />
-      <p className="w-[8.5rem] text-start">{IconInfo[iconType].text}</p>
+      {iconType && <Icon type={iconType} />}
+      {iconType && (
+        <p className="w-[8.5rem] text-start">{IconInfo[iconType].text}</p>
+      )}
+      {!iconType && <p className="w-[8.5rem] text-start">{text}</p>}
     </button>
   );
 }
