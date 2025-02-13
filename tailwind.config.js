@@ -13,6 +13,20 @@ export default {
       backgroundImage: {
         "dot-pattern": "radial-gradient(circle, black 1px, transparent 1px)",
       },
+      keyframes: {
+        scaleUp: {
+          "0%": { transform: "scale(0)" },
+          "100%": { transform: "scale(1)" },
+        },
+        scaleDown: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(0)" },
+        },
+      },
+      animation: {
+        scaleUp: "scaleUp 0.2s ease-out none",
+        scaleDown: "scaleDown 0.2s ease-out forwards",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

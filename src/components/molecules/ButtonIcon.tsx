@@ -7,12 +7,15 @@ type ButtonIconProps = ComponentProps<"button"> & {
   className?: string;
   iconType: IconType;
   visibleToolTip?: boolean;
+  tooltipPosition?: "right" | "bottom";
 };
 
 export default function ButtonIcon({
   className,
   iconType,
   visibleToolTip = false,
+  tooltipPosition = "right",
+  ...others
 }: ButtonIconProps) {
   const iconInfoText = IconInfo[iconType].text;
 
@@ -24,11 +27,12 @@ export default function ButtonIcon({
           "flex items-center justify-center size-12 rounded-full hover:bg-neutral-300/30",
           className
         )}
+        {...others}
       >
         <Icon type={iconType} />
       </button>
       {visibleToolTip && iconInfoText && (
-        <ToolTip text={iconInfoText} position="bottom" />
+        <ToolTip text={iconInfoText} position={tooltipPosition} />
       )}
     </div>
   );
