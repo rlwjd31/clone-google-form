@@ -29,7 +29,7 @@ export default function CheckboxOption({
         )}
         {...others}
       >
-        <Checkbox disabled isActivated={isActivated} onClick={onClickHandler} />
+        <Checkbox isActivated={isActivated} onClick={onClickHandler} />
         <Input.SubTitle
           inputStyle="py-3 hover:bg-card text-sm bg-card px-0"
           defaultValue={defaultValue}
