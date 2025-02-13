@@ -14,7 +14,7 @@ export default function ButtonIcon({
   className,
   iconType,
   visibleToolTip = false,
-  tooltipPosition = "right",
+  tooltipPosition = "bottom",
   ...others
 }: ButtonIconProps) {
   const iconInfoText = IconInfo[iconType].text;

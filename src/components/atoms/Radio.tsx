@@ -10,12 +10,12 @@ export default function Radio({ className, isActivated = false }: RadioProps) {
   return (
     <div
       className={cn(
-        "grid grid-cols-1 rounded-full group grid-rows-1 gap-2 place-items-center hover:bg-purple-secondary/50",
+        "grid size-10 shrink-0 grid-cols-1 rounded-full group grid-rows-1 gap-2 place-items-center hover:bg-purple-secondary",
         className
       )}
     >
-      <div className="z-10 col-start-1 row-start-1 size-5 rounded-full border-2 border-neutral-400" />
-      <div
+      <span className="z-10 col-start-1 row-start-1 size-5 rounded-full border-2 border-neutral-400" />
+      <span
         className={cn(
           "col-start-1 row-start-1 rounded-full size-10 group-hover:bg-purple-secondary",
           isActivated ? "animate-scaleUp" : "animate-scaleDown"

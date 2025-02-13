@@ -13,7 +13,7 @@ export default function Toggle({ enabled, setEnabled }: ToggleProps) {
     <div
       onClick={toggleSwitch}
       className={`flex h-4 w-10 cursor-pointer items-center rounded-full transition-all duration-300 ${
-        enabled ? "bg-purple-primary/20" : "bg-gray-300"
+        enabled ? "bg-purple-primary/30" : "bg-gray-300"
       }`}
     >
       <div

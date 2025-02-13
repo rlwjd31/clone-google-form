@@ -14,8 +14,8 @@ export default function ToolTip({
   className,
 }: ToolTipProps) {
   const positionStyle = {
-    right: "group-hover:translate-x-12",
-    bottom: "group-hover:translate-y-8",
+    right: "group-hover:translate-x-10",
+    bottom: "group-hover:translate-y-[26px]",
   };
   return (
     <div

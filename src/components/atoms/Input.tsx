@@ -7,7 +7,7 @@ type InputProps = ComponentProps<"input"> & {
 };
 
 const defaultInputStyle = "size-full focus:outline-none";
-const underlineNeuralStyle = "absolute bottom-0 w-full h-px bg-neutral-500";
+const underlineNeuralStyle = "absolute bottom-0 w-full h-[1px] bg-neutral-500";
 const underlinePurpleStyle =
   "absolute w-full scale-0 bottom-0 translate-[-50%] h-[2px] transition-all duration-200 bg-purple-primary group-focus-within:scale-100";
 
@@ -91,7 +91,7 @@ const SubTitle: FC<InputProps> = ({
         placeholder="질문"
         className={cn(
           defaultInputStyle,
-          "px-4 py-6 bg-neutral-100 hover:bg-neutral-50",
+          "px-4 py-6 bg-neutral-100/70 hover:bg-neutral-100",
           disabled && "bg-card hover:bg-card",
           inputStyle
         )}
