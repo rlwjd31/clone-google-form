@@ -1,45 +1,39 @@
 import Input from "@/components/atoms/Input";
-import Toggle from "@/components/atoms/Toggle";
-import ButtonIcon from "@/components/molecules/ButtonIcon";
 import Card from "@/components/molecules/Card";
-import CheckboxGroup from "@/components/organisms/CheckboxGroup";
 import Dropdown from "@/components/organisms/Dropdown";
+import QuestionsByType from "@/components/templates/survey-question-block/QuestionsByType";
 import {
   LocalStateActionType,
   LocalStateType,
-  setIsRequired,
   setQuestionTitle,
+  setQuestionType,
   SurveyQuestionBlockStore,
 } from "@/components/templates/survey-question-block/slice";
 import SurveyQuestionBlockFooter from "@/components/templates/survey-question-block/SurveyQuestionBlockFooter";
+import { QuestionType } from "@/types/question.type";
 import { Provider, useDispatch, useSelector } from "react-redux";
-
-
-
-function QuestionsByType() {
-  
-}
 
 function SurveyQuestionBlock() {
   const questionTitle = useSelector(
     (state: LocalStateType) => state.questionTitle
   );
   const dispatch = useDispatch<LocalStateActionType>();
+  const setDropdownValue = (value: QuestionType) => {
+    dispatch(setQuestionType(value));
+  };
 
   return (
     <Card>
-      <div className="flex items-start gap-12 mb-6">
+      <div className="mb-6 flex items-start gap-12">
         <Input.SubTitle
           value={questionTitle}
           onChange={(e) => dispatch(setQuestionTitle(e.target.value))}
         />
-        <Dropdown />
+        <Dropdown setValue={setDropdownValue} />
       </div>
-      {/* questiontype에 따른 분기 rendering영역 */}
-      <CheckboxGroup options={["Apple", "Bannana", "Cherry"]} />
-      {/* questiontype에 따른 분기 rendering영역 */}
+      <QuestionsByType />
 
-      <button className="self-start px-4 py-2 mt-4 border rounded-md shadow-sm cursor-pointer border-neutral-300">
+      <button className="mt-4 cursor-pointer self-start rounded-md border border-neutral-300 px-4 py-2 shadow-sm">
         질문 추가
       </button>
       <SurveyQuestionBlockFooter />
