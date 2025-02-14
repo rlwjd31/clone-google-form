@@ -18,11 +18,10 @@ import { useRef, useState } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 
 function SurveyQuestionBlock() {
-  const { questionTitle, questionType, questions } = useSelector(
+  const { questionTitle, questionType } = useSelector(
     (state: LocalStateType) => ({
       questionTitle: state.questionTitle,
       questionType: state.questionType,
-      questions: state.questions,
     })
   );
   const dispatch = useDispatch<LocalStateActionType>();
@@ -38,7 +37,6 @@ function SurveyQuestionBlock() {
     dispatch(
       setQuestions({
         type: "ADD",
-        value: `옵션 ${(questions as Array<string>).length + 1}`,
       })
     );
   };

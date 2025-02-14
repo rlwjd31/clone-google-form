@@ -9,16 +9,28 @@ type Questions<T extends QuestionType> = T extends
   : undefined;
 
 type SurveyQuestionBlockState<T extends QuestionType> = {
+  lastOptionNumber: number;
   questionTitle: string;
   questions: Questions<T>;
   questionType: T;
   isRequired: boolean;
 };
 
+type SetQuestionsPayloadType =
+  | {
+      type: "ADD";
+      value?: undefined;
+    }
+  | {
+      type: "DELETE";
+      value: string;
+    };
+
 const getInitialState = <T extends QuestionType>(
   type: T
 ): SurveyQuestionBlockState<T> => {
   return {
+    lastOptionNumber: 3,
     questionTitle: "",
     questions: (type === "check-box" ||
     type === "radio-button" ||
@@ -41,17 +53,12 @@ const surveyQuestionBlockSlice = createSlice({
     setQuestionTitle: (state, action: PayloadAction<string>) => {
       state.questionTitle = action.payload;
     },
-    setQuestions: (
-      state,
-      action: PayloadAction<{
-        type: "ADD" | "DELETE";
-        value: string;
-      }>
-    ) => {
+    setQuestions: (state, action: PayloadAction<SetQuestionsPayloadType>) => {
       if (state.questions) {
         switch (action.payload.type) {
           case "ADD":
-            state.questions.push(action.payload.value);
+            state.lastOptionNumber += 1;
+            state.questions.push(`옵션 ${state.lastOptionNumber}`);
             break;
           case "DELETE":
             state.questions = state.questions.filter(
