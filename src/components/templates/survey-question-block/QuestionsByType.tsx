@@ -7,6 +7,8 @@ import {
   LocalStateType,
   setQuestions,
 } from "@/components/templates/survey-question-block/slice";
+import { useSurveyIdContext } from "@/store/SurveyIdProvider";
+import { GlobalState } from "@/store/surveys.slice";
 import { cn } from "@/utils/cn";
 import { ChangeEvent, FocusEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,8 +22,12 @@ export default function QuestionsByType({
   isFocused,
   className,
 }: QuestionsByTypeProps) {
-  const questionType = useSelector(
-    (state: LocalStateType) => state.questionType
+  const surveyId = useSurveyIdContext();
+  const {  questionType } = useSelector(
+    (state: GlobalState) => ({
+      ...state.surveysState.find((survey) => survey.surveyId === surveyId)
+        ?.state,
+    })
   );
   const questions = useSelector((state: LocalStateType) => state.questions);
   const dispatch = useDispatch<LocalStateActionType>();

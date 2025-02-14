@@ -6,13 +6,16 @@ import {
   LocalStateActionType,
   // LocalStateType,
   setQuestions,
-  setQuestionType,
   // SurveyQuestionBlockStore,
 } from "@/components/templates/survey-question-block/slice";
 import SurveyQuestionBlockFooter from "@/components/templates/survey-question-block/SurveyQuestionBlockFooter";
 import useClickOutside from "@/hooks/useClickOustside";
 import { useSurveyIdContext } from "@/store/SurveyIdProvider";
-import { GlobalState, setQuestionTitle } from "@/store/surveys.slice";
+import {
+  GlobalState,
+  setQuestionTitle,
+  setQuestionType,
+} from "@/store/surveys.slice";
 import { QuestionType } from "@/types/question.type";
 import { cn } from "@/utils/cn";
 import { ChangeEvent, useRef, useState } from "react";
@@ -42,7 +45,9 @@ export default function SurveyQuestionBlock() {
   useClickOutside(cardRef, () => setIsCardFocused(false));
 
   const setDropdownValue = (value: QuestionType | string) => {
-    dispatch(setQuestionType(value as QuestionType));
+    dispatch(
+      setQuestionType({ surveyId, questionType: value as QuestionType })
+    );
   };
 
   const addOption = () => {
