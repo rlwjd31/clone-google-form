@@ -1,0 +1,185 @@
+import { QuestionType } from "@/types/question.type";
+import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+type Question = {
+  optionId: number;
+  value: string;
+};
+
+type Questions<T extends QuestionType> = T extends
+  | "check-box"
+  | "radio-button"
+  | "dropdown"
+  ? Question[]
+  : undefined;
+
+type SurveyState<T extends QuestionType> = {
+  lastOptionNumber: number;
+  questionTitle: string;
+  questions: Questions<T>;
+  questionType: T;
+  isRequired: boolean;
+};
+
+type SetQuestionsPayloadType =
+  | {
+      surveyId: number;
+      type: "ADD";
+    }
+  | {
+      surveyId: number;
+      type: "DELETE";
+      optionId: number;
+    }
+  | {
+      surveyId: number;
+      type: "UPDATE";
+      optionId: number;
+      value: string;
+    };
+
+const createInitialSurveyState = <T extends QuestionType>(
+  type: T
+): SurveyState<T> => {
+  return {
+    lastOptionNumber: 3,
+    questionTitle: "",
+    questions: ([
+      "check-box",
+      "radio-button",
+      "arrow-drop-down-circle",
+    ].includes(type)
+      ? [
+          { optionId: 1, value: "옵션 1" },
+          { optionId: 2, value: "옵션 2" },
+          { optionId: 3, value: "옵션 3" },
+        ]
+      : undefined) as Questions<T>,
+    questionType: type,
+    isRequired: false,
+  };
+};
+
+type SurveysState = {
+  lastSurveyId: number;
+  bigQuestionTitle: string;
+  description: string;
+  surveysState: Array<{ surveyId: number; state: SurveyState<QuestionType> }>;
+};
+
+const initialSurveysState: SurveysState = {
+  lastSurveyId: 1,
+  bigQuestionTitle: "제목 없는 설문지",
+  description: "설문지 설명",
+  surveysState: [
+    {
+      surveyId: 1,
+      state: createInitialSurveyState(
+        "short-text"
+      ) as SurveyState<QuestionType>,
+    },
+  ],
+};
+
+const surveysSlice = createSlice({
+  name: "sruverysSlice",
+  initialState: initialSurveysState,
+  reducers: {
+    setQuestionTitle: (
+      state,
+      action: PayloadAction<{ surveyId: number; value: string }>
+    ) => {
+      console.log(action.payload);
+      const { surveyId, value } = action.payload;
+      const survey = state.surveysState.find(
+        (state) => state.surveyId === surveyId
+      );
+      if (survey) {
+        survey.state.questionTitle = value;
+      }
+      // console.log(survey);
+      // state.surveysState[surveyId].state.questionTitle = value;
+    },
+    setQuestions: (state, action: PayloadAction<SetQuestionsPayloadType>) => {
+      const { surveyId } = action.payload;
+      const survey = state.surveysState.find(
+        (state) => state.surveyId === surveyId
+      );
+      if (survey && survey.state.questions) {
+        switch (action.payload.type) {
+          case "ADD":
+            survey.state.lastOptionNumber += 1;
+            survey.state.questions.push({
+              optionId: survey.state.lastOptionNumber,
+              value: `옵션 ${survey.state.lastOptionNumber}`,
+            });
+            break;
+          case "DELETE": {
+            const { optionId: payloadOptionId } = action.payload as {
+              surveyId: number;
+              type: "DELETE";
+              optionId: number;
+            };
+            survey.state.questions = survey.state.questions.filter(
+              ({ optionId }) => optionId !== payloadOptionId
+            );
+            break;
+          }
+          case "UPDATE": {
+            const { optionId, value } = action.payload as {
+              surveyId: number;
+              type: "UPDATE";
+              optionId: number;
+              value: string;
+            };
+            survey.state.questions = survey.state.questions.map((question) => ({
+              ...question,
+              value: question.optionId === optionId ? value : question.value,
+            }));
+            break;
+          }
+        }
+      }
+    },
+    setQuestionType: (
+      state,
+      action: PayloadAction<{ surveyId: number; questionType: QuestionType }>
+    ) => {
+      const { surveyId, questionType } = action.payload;
+      const survey = state.surveysState.find(
+        (state) => state.surveyId === surveyId
+      );
+      if (survey) {
+        survey.state.questionType = questionType;
+      }
+    },
+    setIsRequired: (
+      state,
+      action: PayloadAction<{ surveyId: number; isRequired: boolean }>
+    ) => {
+      const { surveyId, isRequired } = action.payload;
+      const survey = state.surveysState.find(
+        (state) => state.surveyId === surveyId
+      );
+      if (survey) {
+        survey.state.isRequired = isRequired;
+      }
+    },
+    setBigQuestionTitle: (state, action: PayloadAction<string>) => {
+      state.bigQuestionTitle = action.payload;
+    },
+  },
+});
+
+export const {
+  setQuestionTitle,
+  setQuestions,
+  setQuestionType,
+  setIsRequired,
+} = surveysSlice.actions;
+
+export const SurveysStore = configureStore({
+  reducer: surveysSlice.reducer,
+});
+export type GlobalState = ReturnType<typeof SurveysStore.getState>;
+export type GlobalActionType = typeof SurveysStore.dispatch;
