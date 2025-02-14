@@ -24,18 +24,22 @@ export default function Radio({
       {...others}
     >
       <span className="z-10 col-start-1 row-start-1 size-5 rounded-full border-2 border-neutral-400" />
-      <span
-        className={cn(
-          "col-start-1 row-start-1 rounded-full size-10 group-hover:bg-purple-secondary",
-          isActivated ? "animate-scaleUp" : "animate-scaleDown"
-        )}
-      />
-      <span
-        className={cn(
-          "z-20 col-start-1 row-start-1 size-[10px] rounded-full bg-purple-primary",
-          isActivated ? "animate-scaleUp" : "animate-scaleDown"
-        )}
-      />
+      {!disabled && (
+        <>
+          <span
+            className={cn(
+              "col-start-1 row-start-1 rounded-full size-10 group-hover:bg-purple-secondary",
+              isActivated ? "animate-scaleUp" : "animate-scaleDown"
+            )}
+          />
+          <span
+            className={cn(
+              "z-20 col-start-1 row-start-1 size-[10px] rounded-full bg-purple-primary",
+              isActivated ? "animate-scaleUp" : "animate-scaleDown"
+            )}
+          />
+        </>
+      )}
     </button>
   );
 }
