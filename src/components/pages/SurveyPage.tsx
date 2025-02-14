@@ -24,6 +24,7 @@ export default function SurveyPage() {
         ref={cardRef}
         isCardFocused={isCardFocused}
         onClick={() => setIsCardFocused(true)}
+        draggable={false}
       >
         <div className="absolute left-0 top-0 z-20 h-3 w-full bg-purple-primary" />
         <div className="flex w-full flex-col gap-1">
