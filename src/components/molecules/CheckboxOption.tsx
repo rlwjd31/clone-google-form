@@ -39,6 +39,7 @@ export default function CheckboxOption({
           defaultValue={defaultValue}
         />
         <ButtonIcon
+          className="hidden-preview-mode"
           iconType="close"
           visibleToolTip
           onClick={onClickDeleteHandler}
