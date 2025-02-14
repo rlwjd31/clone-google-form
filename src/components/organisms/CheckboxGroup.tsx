@@ -1,17 +1,19 @@
 import CheckboxOption from "@/components/molecules/CheckboxOption";
 import { cn } from "@/utils/cn";
-import { ComponentProps, useState } from "react";
+import { ChangeEventHandler, ComponentProps, useState } from "react";
 
 type RadioGroupProps = ComponentProps<"div"> & {
   options: Array<{ id: number; value: string }>;
   className?: string;
   onClickDeleteHandler?: (id: number) => void;
+  onChangeInputHandler: ChangeEventHandler<HTMLInputElement>;
 };
 
 export default function CheckboxGroup({
   className,
   options,
   onClickDeleteHandler,
+  onChangeInputHandler,
 }: RadioGroupProps) {
   const [selectedValue, setSelectedValue] = useState<string[]>([]);
 
@@ -34,6 +36,7 @@ export default function CheckboxGroup({
           onClickDeleteHandler={() =>
             onClickDeleteHandler ? onClickDeleteHandler(id) : (() => {})()
           }
+          onChangeInputHandler={onChangeInputHandler}
         />
       ))}
     </div>

@@ -3,7 +3,7 @@ import Icon from "@/components/atoms/Icon";
 import Input from "@/components/atoms/Input";
 import ButtonIcon from "@/components/molecules/ButtonIcon";
 import { cn } from "@/utils/cn";
-import { ComponentProps, MouseEventHandler } from "react";
+import { ChangeEventHandler, ComponentProps, MouseEventHandler } from "react";
 
 type CheckboxOptionProps = ComponentProps<"div"> & {
   className?: string;
@@ -11,6 +11,7 @@ type CheckboxOptionProps = ComponentProps<"div"> & {
   value: string;
   onClickDeleteHandler: () => void;
   onClickHandler: MouseEventHandler<HTMLButtonElement>;
+  onChangeInputHandler: ChangeEventHandler<HTMLInputElement>;
 };
 
 export default function CheckboxOption({
@@ -18,6 +19,7 @@ export default function CheckboxOption({
   isActivated,
   onClickHandler,
   onClickDeleteHandler,
+  onChangeInputHandler,
   value,
   ...others
 }: CheckboxOptionProps) {
@@ -34,6 +36,7 @@ export default function CheckboxOption({
         <Input.SubTitle
           inputStyle="py-3 hover:bg-card text-sm bg-card px-0"
           value={value}
+          onChange={onChangeInputHandler}
         />
         <ButtonIcon
           className="hidden-preview-mode"
