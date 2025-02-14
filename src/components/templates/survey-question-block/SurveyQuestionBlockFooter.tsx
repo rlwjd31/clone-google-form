@@ -1,29 +1,29 @@
 import Toggle from "@/components/atoms/Toggle";
 import ButtonIcon from "@/components/molecules/ButtonIcon";
-import {
-  LocalStateActionType,
-  LocalStateType,
-  setIsRequired,
-} from "@/components/templates/survey-question-block/slice";
+import { useSurveyIdContext } from "@/store/SurveyIdProvider";
+import { GlobalActionType, GlobalState, setIsRequired } from "@/store/surveys.slice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SurveyQuestionBlockFooter() {
-  const isRequired = useSelector((state: LocalStateType) => state.isRequired);
-  const dispatch = useDispatch<LocalStateActionType>();
+  const surveyId = useSurveyIdContext();
+  const { isRequired } = useSelector((state: GlobalState) => ({
+    ...state.surveysState.find((survey) => survey.surveyId === surveyId)?.state,
+  }));
+  const dispatch = useDispatch<GlobalActionType>();
   return (
-    <div className="mt-10 flex justify-end border-t border-t-neutral-200 py-4">
+    <div className="flex justify-end py-4 mt-10 border-t border-t-neutral-200">
       <ButtonIcon
         iconType="content-copy"
         visibleToolTip
         tooltipPosition="bottom"
       />
       <ButtonIcon iconType="delete" visibleToolTip />
-      <div className="ml-3 mr-5 w-px bg-neutral-300" />
+      <div className="w-px ml-3 mr-5 bg-neutral-300" />
       <div className="flex items-center gap-5">
         <span>필수</span>
         <Toggle
-          enabled={isRequired}
-          setEnabled={() => dispatch(setIsRequired(!isRequired))}
+          enabled={!!isRequired}
+          setEnabled={() => dispatch(setIsRequired({surveyId, isRequired: !isRequired}))}
         />
       </div>
     </div>

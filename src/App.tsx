@@ -1,11 +1,15 @@
 import Layout from "@/components/Layout";
-import SurveyQuestionBlock from "@/components/templates/survey-question-block/SurveyQuestionBlock";
+import SurveyPage from "@/components/pages/SurveyPage";
+import { SurveysStore } from "@/store/surveys.slice";
+import { Provider } from "react-redux";
 
 function App() {
   return (
-    <Layout>
-      <SurveyQuestionBlock />
-    </Layout>
+    <Provider store={SurveysStore}>
+      <Layout>
+        <SurveyPage />
+      </Layout>
+    </Provider>
   );
 }
 
