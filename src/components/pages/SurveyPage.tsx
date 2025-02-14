@@ -1,4 +1,5 @@
 import Input from "@/components/atoms/Input";
+import ButtonIcon from "@/components/molecules/ButtonIcon";
 import Card from "@/components/molecules/Card";
 import SurveyQuestionBlock from "@/components/templates/survey-question-block/SurveyQuestionBlock";
 import useClickOutside from "@/hooks/useClickOustside";
@@ -18,7 +19,8 @@ export default function SurveyPage() {
     "[&_div]:opacity-0 [&_.input-underline-neutral]:hover:opacity-0";
   const focusedInputStyle = "[&_div]:opacity-100";
   return (
-    <div className="flex size-full flex-col items-center gap-8">
+    <div className="relative flex w-full flex-col items-center gap-4 pb-10">
+      <AddSurveyButtonIcon positionY={buttonY} />
       <Card
         className="relative overflow-hidden pb-6"
         ref={cardRef}
@@ -47,6 +49,12 @@ export default function SurveyPage() {
           <SurveyQuestionBlock />
         </SurveyIdProvider>
       ))}
+function AddSurveyButtonIcon({ positionY }: { positionY: number }) {
+  return (
+    <div
+      className="absolute right-0 top-0 z-50 transition-all duration-300"
+    >
+      <ButtonIcon iconType="add-circle" className="rounded-lg bg-card p-2" />
     </div>
   );
 }
