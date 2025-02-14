@@ -8,7 +8,9 @@ type RadioGroupProps = ComponentProps<"div"> & {
 };
 
 export default function RadioGroup({ className, options }: RadioGroupProps) {
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(
+    undefined
+  );
 
   return (
     <div className={cn("flex flex-col gap-1", className)}>
