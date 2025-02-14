@@ -6,7 +6,6 @@ import { cn } from "@/utils/cn";
 import {
   ChangeEventHandler,
   ComponentProps,
-  FocusEvent,
   FocusEventHandler,
   MouseEventHandler,
 } from "react";
@@ -32,8 +31,8 @@ export default function CheckboxOption({
   ...others
 }: CheckboxOptionProps) {
   return (
-    <div className="relative flex w-full items-center gap-2" draggable>
-      <div className="absolute -translate-x-4 cursor-move opacity-0 transition-all duration-100 hover:opacity-100">
+    <div className="relative flex items-center w-full gap-2" draggable>
+      <div className="absolute transition-all duration-100 -translate-x-4 opacity-0 cursor-move hover:opacity-100">
         <Icon type="drag-indicator" />
       </div>
       <div
