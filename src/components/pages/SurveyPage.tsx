@@ -6,7 +6,7 @@ import useClickOutside from "@/hooks/useClickOustside";
 import { SurveyIdProvider } from "@/store/SurveyIdProvider";
 import { GlobalState } from "@/store/surveys.slice";
 import { cn } from "@/utils/cn";
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function SurveyPage() {
@@ -17,18 +17,24 @@ export default function SurveyPage() {
   useClickOutside(cardRef, () => setIsCardFocused(false));
   const surveyRefs = useRef<HTMLDivElement[]>([]);
 
+  useLayoutEffect(() => {
+    setButtonY(getButtonYPosition(surveyRefs.current[0]));
+  }, []);
+
   const notFocusedInputStyle =
     "[&_div]:opacity-0 [&_.input-underline-neutral]:hover:opacity-0";
   const focusedInputStyle = "[&_div]:opacity-100";
 
   const setButtonYPosition = (index: number) => {
     requestAnimationFrame(() => {
-      const container = surveyRefs.current[index];
-      if (container) {
-        const rect = container.getBoundingClientRect();
-        setButtonY(rect.top + window.scrollY); // * 렌더링 후 정확한 top 값 가져오기
-      }
+      // * 렌더링 후 정확한 top 값 가져오기
+      setButtonY(getButtonYPosition(surveyRefs.current[index]));
     });
+  };
+
+  const getButtonYPosition = (element: HTMLDivElement) => {
+    const { top } = element.getBoundingClientRect();
+    return top + window.scrollY;
   };
 
   return (
@@ -78,9 +84,9 @@ export default function SurveyPage() {
 function AddSurveyButtonIcon({ positionY }: { positionY: number }) {
   return (
     <div
-      className="absolute top-0 right-0 z-50 transition-all duration-300"
+      className="absolute top-0 right-0 z-50 transition-all duration-300 ease-in"
       style={{
-        transform: `translate(150%, ${positionY - 48}px)`, // 버튼 높이 48px
+        transform: `translate(150%, ${positionY - 48}px)`, // * 버튼 높이 48px
       }}
     >
       <ButtonIcon iconType="add-circle" className="p-2 rounded-lg bg-card" />
