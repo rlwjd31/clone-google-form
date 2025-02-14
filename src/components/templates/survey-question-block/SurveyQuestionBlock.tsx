@@ -12,6 +12,7 @@ import {
 import SurveyQuestionBlockFooter from "@/components/templates/survey-question-block/SurveyQuestionBlockFooter";
 import useClickOutside from "@/hooks/useClickOustside";
 import { QuestionType } from "@/types/question.type";
+import { cn } from "@/utils/cn";
 import { useRef, useState } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 
@@ -51,7 +52,10 @@ function SurveyQuestionBlock() {
         />
         {isCardFocused && <Dropdown setValue={setDropdownValue} />}
       </div>
-      <QuestionsByType isFocused={isCardFocused} />
+      <QuestionsByType
+        className={cn(!isCardFocused && "[&_.hidden-preview-mode]:hidden")}
+        isFocused={isCardFocused}
+      />
 
       {isCardFocused && (
         <button className="items-cener mt-4 cursor-pointer self-start rounded-md border border-neutral-300 px-4 py-2 shadow-sm">

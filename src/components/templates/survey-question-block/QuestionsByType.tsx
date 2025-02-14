@@ -8,9 +8,13 @@ import { useSelector } from "react-redux";
 
 type QuestionsByTypeProps = {
   isFocused?: boolean;
+  className?: string;
 };
 
-export default function QuestionsByType({ isFocused }: QuestionsByTypeProps) {
+export default function QuestionsByType({
+  isFocused,
+  className,
+}: QuestionsByTypeProps) {
   const questionType = useSelector(
     (state: LocalStateType) => state.questionType
   );
@@ -27,7 +31,8 @@ export default function QuestionsByType({ isFocused }: QuestionsByTypeProps) {
         <CheckboxGroup
           className={cn(
             "[&_.input-underline-neutral]:opacity-0",
-            isFocused && "[&_.input-underline-neutral]:hover:opacity-100"
+            isFocused && "[&_.input-underline-neutral]:hover:opacity-100",
+            className
           )}
           options={!Array.isArray(questions) ? [""] : questions}
         />
@@ -37,7 +42,8 @@ export default function QuestionsByType({ isFocused }: QuestionsByTypeProps) {
         <RadioGroup
           className={cn(
             "[&_.input-underline-neutral]:opacity-0",
-            isFocused && "[&_.input-underline-neutral]:hover:opacity-100"
+            isFocused && "[&_.input-underline-neutral]:hover:opacity-100",
+            className
           )}
           options={!Array.isArray(questions) ? [""] : questions}
         />
