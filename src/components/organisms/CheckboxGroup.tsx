@@ -5,9 +5,14 @@ import { ComponentProps, useState } from "react";
 type RadioGroupProps = ComponentProps<"div"> & {
   options: string[];
   className?: string;
+  onClickDeleteHandler?: (value: string) => void;
 };
 
-export default function CheckboxGroup({ className, options }: RadioGroupProps) {
+export default function CheckboxGroup({
+  className,
+  options,
+  onClickDeleteHandler,
+}: RadioGroupProps) {
   const [selectedValue, setSelectedValue] = useState<string[]>([]);
 
   const toggleSelectedValue = (option: string) => {
@@ -24,8 +29,10 @@ export default function CheckboxGroup({ className, options }: RadioGroupProps) {
         <CheckboxOption
           isActivated={selectedValue.includes(option)}
           onClickHandler={() => toggleSelectedValue(option)}
-          defaultValue={option || `옵션 ${idx + 1}`}
-          onClickDeleteHandler={() => {}}
+          value={option ?? `옵션 ${idx + 1}`}
+          onClickDeleteHandler={() =>
+            onClickDeleteHandler ? onClickDeleteHandler(option) : (() => {})()
+          }
         />
       ))}
     </div>

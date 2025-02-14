@@ -7,8 +7,8 @@ import { ComponentProps, MouseEventHandler } from "react";
 
 type RadioOptionProps = ComponentProps<"div"> & {
   className?: string;
-  defaultValue: string;
   isActivated: boolean;
+  value: string;
   onClickDeleteHandler: () => void;
   onClickHandler: MouseEventHandler<HTMLButtonElement>;
 };
@@ -17,8 +17,8 @@ export default function RadioOption({
   className,
   isActivated,
   onClickHandler,
-  defaultValue,
   onClickDeleteHandler,
+  value,
   ...others
 }: RadioOptionProps) {
   return (
@@ -27,16 +27,13 @@ export default function RadioOption({
         <Icon type="drag-indicator" />
       </div>
       <div
-        className={cn(
-          "flex w-full items-center gap-2 py-1",
-          className
-        )}
+        className={cn("flex w-full items-center gap-2 py-1", className)}
         {...others}
       >
         <Radio isActivated={isActivated} disabled onClick={onClickHandler} />
         <Input.SubTitle
           inputStyle="py-3 hover:bg-card text-sm bg-card px-0"
-          defaultValue={defaultValue}
+          value={value}
         />
         <ButtonIcon
           className="hidden-preview-mode"

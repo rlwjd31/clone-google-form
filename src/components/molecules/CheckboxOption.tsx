@@ -7,8 +7,8 @@ import { ComponentProps, MouseEventHandler } from "react";
 
 type CheckboxOptionProps = ComponentProps<"div"> & {
   className?: string;
-  defaultValue: string;
   isActivated: boolean;
+  value: string;
   onClickDeleteHandler: () => void;
   onClickHandler: MouseEventHandler<HTMLButtonElement>;
 };
@@ -17,8 +17,8 @@ export default function CheckboxOption({
   className,
   isActivated,
   onClickHandler,
-  defaultValue,
   onClickDeleteHandler,
+  value,
   ...others
 }: CheckboxOptionProps) {
   return (
@@ -33,7 +33,7 @@ export default function CheckboxOption({
         <Checkbox isActivated={isActivated} onClick={onClickHandler} disabled />
         <Input.SubTitle
           inputStyle="py-3 hover:bg-card text-sm bg-card px-0"
-          defaultValue={defaultValue}
+          value={value}
         />
         <ButtonIcon
           className="hidden-preview-mode"

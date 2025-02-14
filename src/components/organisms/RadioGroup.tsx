@@ -5,9 +5,14 @@ import { ComponentProps, useState } from "react";
 type RadioGroupProps = ComponentProps<"div"> & {
   options: string[];
   className?: string;
+  onClickDeleteHandler?: (value: string) => void;
 };
 
-export default function RadioGroup({ className, options }: RadioGroupProps) {
+export default function RadioGroup({
+  className,
+  options,
+  onClickDeleteHandler,
+}: RadioGroupProps) {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
     undefined
   );
@@ -20,8 +25,10 @@ export default function RadioGroup({ className, options }: RadioGroupProps) {
           onClickHandler={() =>
             setSelectedValue((prev) => (prev !== option ? option : ""))
           }
-          defaultValue={option || `옵션 ${idx + 1}`}
-          onClickDeleteHandler={() => {}}
+          value={option ?? `옵션 ${idx + 1}`}
+          onClickDeleteHandler={() =>
+            onClickDeleteHandler ? onClickDeleteHandler(option) : (() => {})()
+          }
         />
       ))}
     </div>

@@ -2,9 +2,13 @@ import Input from "@/components/atoms/Input";
 import CheckboxGroup from "@/components/organisms/CheckboxGroup";
 import Dropdown from "@/components/organisms/Dropdown";
 import RadioGroup from "@/components/organisms/RadioGroup";
-import { LocalStateType } from "@/components/templates/survey-question-block/slice";
+import {
+  LocalStateActionType,
+  LocalStateType,
+  setQuestions,
+} from "@/components/templates/survey-question-block/slice";
 import { cn } from "@/utils/cn";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 type QuestionsByTypeProps = {
   isFocused?: boolean;
@@ -19,6 +23,16 @@ export default function QuestionsByType({
     (state: LocalStateType) => state.questionType
   );
   const questions = useSelector((state: LocalStateType) => state.questions);
+  const dispatch = useDispatch<LocalStateActionType>();
+
+  const deleteOption = (value: string) => {
+    dispatch(
+      setQuestions({
+        type: "DELETE",
+        value,
+      })
+    );
+  };
 
   switch (questionType) {
     case "short-text":
@@ -33,6 +47,7 @@ export default function QuestionsByType({
             className
           )}
           options={!Array.isArray(questions) ? [""] : questions}
+          onClickDeleteHandler={deleteOption}
         />
       );
     case "radio-button":
@@ -43,6 +58,7 @@ export default function QuestionsByType({
             className
           )}
           options={!Array.isArray(questions) ? [""] : questions}
+          onClickDeleteHandler={deleteOption}
         />
       );
     case "arrow-drop-down-circle":
