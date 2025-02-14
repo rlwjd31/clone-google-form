@@ -35,7 +35,12 @@ function SurveyQuestionBlock() {
   };
 
   const addOption = () => {
-    dispatch(setQuestions(`옵션 ${questions.length + 1}`));
+    dispatch(
+      setQuestions({
+        type: "ADD",
+        value: `옵션 ${(questions as Array<string>).length + 1}`,
+      })
+    );
   };
 
   const isOptionAddButtonShouldeBeRender =

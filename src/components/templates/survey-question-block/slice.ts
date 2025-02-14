@@ -6,7 +6,7 @@ type Questions<T extends QuestionType> = T extends
   | "radio-button"
   | "dropdown"
   ? string[]
-  : string;
+  : undefined;
 
 type SurveyQuestionBlockState<T extends QuestionType> = {
   questionTitle: string;
@@ -23,15 +23,15 @@ const getInitialState = <T extends QuestionType>(
     questions: (type === "check-box" ||
     type === "radio-button" ||
     type === "arrow-drop-down-circle"
-      ? [""]
-      : "") as Questions<T>,
+      ? ["옵션 1", "옵션 2", "옵션 3"]
+      : undefined) as Questions<T>,
     questionType: type,
     isRequired: false,
   };
 };
 
 const initialState = getInitialState(
-  "short-text"
+  "check-box"
 ) as SurveyQuestionBlockState<QuestionType>;
 
 const surveyQuestionBlockSlice = createSlice({
@@ -41,17 +41,24 @@ const surveyQuestionBlockSlice = createSlice({
     setQuestionTitle: (state, action: PayloadAction<string>) => {
       state.questionTitle = action.payload;
     },
-    setQuestions: (state, action: PayloadAction<string>) => {
-      if (Array.isArray(state.questions)) {
-        const foundIndex = state.questions.indexOf(action.payload);
-
-        if (foundIndex > -1) {
-          state.questions.splice(foundIndex, 1);
-        } else {
-          state.questions.push(action.payload);
+    setQuestions: (
+      state,
+      action: PayloadAction<{
+        type: "ADD" | "DELETE";
+        value: string;
+      }>
+    ) => {
+      if (state.questions) {
+        switch (action.payload.type) {
+          case "ADD":
+            state.questions.push(action.payload.value);
+            break;
+          case "DELETE":
+            state.questions = state.questions.filter(
+              (value) => value !== action.payload.value
+            );
+            break;
         }
-      } else {
-        state.questions = action.payload;
       }
     },
     setQuestionType: (state, action: PayloadAction<QuestionType>) => {
