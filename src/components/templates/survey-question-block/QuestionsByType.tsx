@@ -3,9 +3,14 @@ import CheckboxGroup from "@/components/organisms/CheckboxGroup";
 import Dropdown from "@/components/organisms/Dropdown";
 import RadioGroup from "@/components/organisms/RadioGroup";
 import { LocalStateType } from "@/components/templates/survey-question-block/slice";
+import { cn } from "@/utils/cn";
 import { useSelector } from "react-redux";
 
-export default function QuestionsByType() {
+type QuestionsByTypeProps = {
+  isFocused?: boolean;
+};
+
+export default function QuestionsByType({ isFocused }: QuestionsByTypeProps) {
   const questionType = useSelector(
     (state: LocalStateType) => state.questionType
   );
@@ -19,11 +24,23 @@ export default function QuestionsByType() {
       return <Input.Description placeholder="장문형" disabled />;
     case "check-box":
       return (
-        <CheckboxGroup options={!Array.isArray(questions) ? [""] : questions} />
+        <CheckboxGroup
+          className={cn(
+            "[&_.input-underline-neutral]:opacity-0",
+            isFocused && "[&_.input-underline-neutral]:hover:opacity-100"
+          )}
+          options={!Array.isArray(questions) ? [""] : questions}
+        />
       );
     case "radio-button":
       return (
-        <RadioGroup options={!Array.isArray(questions) ? [""] : questions} />
+        <RadioGroup
+          className={cn(
+            "[&_.input-underline-neutral]:opacity-0",
+            isFocused && "[&_.input-underline-neutral]:hover:opacity-100"
+          )}
+          options={!Array.isArray(questions) ? [""] : questions}
+        />
       );
     case "arrow-drop-down-circle":
       // TODO: dropdown에 해당되는 UI구현

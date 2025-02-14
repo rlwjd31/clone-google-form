@@ -7,7 +7,7 @@ type InputProps = ComponentProps<"input"> & {
 };
 
 const defaultInputStyle = "size-full focus:outline-none";
-const underlineNeuralStyle = "absolute bottom-0 w-full h-[1px] bg-neutral-500";
+const underlineNeuralStyle = "absolute bottom-0 w-full h-[1px] bg-neutral-400";
 const underlinePurpleStyle =
   "absolute w-full scale-0 bottom-0 translate-[-50%] h-[2px] transition-all duration-200 bg-purple-primary group-focus-within:scale-100";
 
@@ -30,11 +30,15 @@ function InputContainer({
 }
 
 function UnderlineNeutral({ className }: { className?: string }) {
-  return <div className={cn(underlineNeuralStyle, className)} />;
+  return (
+    <div
+      className={cn("input-underline-neutral", underlineNeuralStyle, className)}
+    />
+  );
 }
 
 function UnderlinePurple() {
-  return <div className={underlinePurpleStyle} />;
+  return <div className={cn("input-underline-purple", underlinePurpleStyle)} />;
 }
 
 export default function Input({
