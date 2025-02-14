@@ -21,6 +21,7 @@ export default function SurveyPage() {
     "[&_div]:opacity-0 [&_.input-underline-neutral]:hover:opacity-0";
   const focusedInputStyle = "[&_div]:opacity-100";
 
+  // @FIXME: 보튼 위치가 survey의 상단에 제대로 위치하지 않음 => focus시 survey의 높이가 늘어나므로 이를 계산해야되는 이슈.
   const setButtonYPosition = (index: number) => {
     const container = surveyRefs.current[index];
     if (container) {
