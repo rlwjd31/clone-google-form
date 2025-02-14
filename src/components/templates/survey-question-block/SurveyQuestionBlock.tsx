@@ -32,6 +32,9 @@ function SurveyQuestionBlock() {
     dispatch(setQuestionType(value));
   };
 
+  const isOptionAddButtonShouldeBeRender =
+    questionType !== "long-text" && questionType !== "short-text";
+
   return (
     <Card
       isCardFocused={isCardFocused}
@@ -59,13 +62,14 @@ function SurveyQuestionBlock() {
         isFocused={isCardFocused}
       />
 
-      {isCardFocused &&
-        questionType !== "long-text" &&
-        questionType !== "short-text" && (
-          <button className="items-cener mt-4 cursor-pointer self-start rounded-md border border-neutral-300 px-4 py-2 shadow-sm">
-            옵션 추가
-          </button>
-        )}
+      {isCardFocused && isOptionAddButtonShouldeBeRender && (
+        <button
+          onClick={addOption}
+          className="items-cener mt-4 cursor-pointer self-start rounded-md border border-neutral-300 px-4 py-2 shadow-sm"
+        >
+          옵션 추가
+        </button>
+      )}
 
       {isCardFocused && <SurveyQuestionBlockFooter />}
     </Card>
