@@ -15,6 +15,7 @@ const dropdownItemsContent: QuestionType[] = [
 
 type DropdownProps = ComponentProps<"div"> & {
   className?: string;
+  questionType?: QuestionType;
   contents?: string[];
   setValue: (value: string | QuestionType) => void;
 };
@@ -22,12 +23,13 @@ type DropdownProps = ComponentProps<"div"> & {
 export default function Dropdown({
   contents,
   className,
+  questionType,
   setValue,
 }: DropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDropdownValue, setSelectedDropdownValue] =
-    useState("short-text");
+    useState<QuestionType | string>(questionType ?? "short-text");
   const DROPDOWN_ITEM_HEIGHT = 48;
   useClickOutside(dropdownRef, () => setIsOpen(false));
 

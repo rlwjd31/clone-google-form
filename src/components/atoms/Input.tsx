@@ -7,7 +7,8 @@ type InputProps = ComponentProps<"input"> & {
 };
 
 const defaultInputStyle = "size-full focus:outline-none";
-const underlineNeuralStyle = "absolute bottom-0 w-full h-[1px] bg-neutral-400";
+const underlineNeuralStyle =
+  "absolute bottom-0 w-full h-[1px] bg-neutral-400 opacity-0";
 const underlinePurpleStyle =
   "absolute w-full scale-0 bottom-0 translate-[-50%] h-[2px] transition-all duration-200 bg-purple-primary group-focus-within:scale-100";
 
@@ -25,7 +26,14 @@ function InputContainer({
   children: ReactNode;
 }) {
   return (
-    <div className={cn("group relative w-full", className)}>{children}</div>
+    <div
+      className={cn(
+        "group relative w-full [&:hover>*:nth-child(2)]:opacity-100",
+        className
+      )}
+    >
+      {children}
+    </div>
   );
 }
 

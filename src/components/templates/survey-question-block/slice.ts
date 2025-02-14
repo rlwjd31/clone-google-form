@@ -1,37 +1,62 @@
 import { QuestionType } from "@/types/question.type";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type Question = {
+  id: number;
+  value: string;
+};
+
 type Questions<T extends QuestionType> = T extends
   | "check-box"
   | "radio-button"
   | "dropdown"
-  ? string[]
-  : string;
+  ? Question[]
+  : undefined;
 
 type SurveyQuestionBlockState<T extends QuestionType> = {
+  lastOptionNumber: number;
   questionTitle: string;
   questions: Questions<T>;
   questionType: T;
   isRequired: boolean;
 };
 
+type SetQuestionsPayloadType =
+  | {
+      type: "ADD";
+    }
+  | {
+      type: "DELETE";
+      id: number;
+    }
+  | {
+      type: "UPDATE";
+      id: number;
+      value: string;
+    };
+
 const getInitialState = <T extends QuestionType>(
   type: T
 ): SurveyQuestionBlockState<T> => {
   return {
+    lastOptionNumber: 3,
     questionTitle: "",
     questions: (type === "check-box" ||
     type === "radio-button" ||
     type === "arrow-drop-down-circle"
-      ? [""]
-      : "") as Questions<T>,
+      ? [
+          { id: 1, value: "옵션 1" },
+          { id: 2, value: "옵션 2" },
+          { id: 3, value: "옵션 3" },
+        ]
+      : undefined) as Questions<T>,
     questionType: type,
     isRequired: false,
   };
 };
 
 const initialState = getInitialState(
-  "short-text"
+  "check-box"
 ) as SurveyQuestionBlockState<QuestionType>;
 
 const surveyQuestionBlockSlice = createSlice({
@@ -41,17 +66,39 @@ const surveyQuestionBlockSlice = createSlice({
     setQuestionTitle: (state, action: PayloadAction<string>) => {
       state.questionTitle = action.payload;
     },
-    setQuestions: (state, action: PayloadAction<string>) => {
-      if (Array.isArray(state.questions)) {
-        const foundIndex = state.questions.indexOf(action.payload);
-
-        if (foundIndex > -1) {
-          state.questions.splice(foundIndex, 1);
-        } else {
-          state.questions.push(action.payload);
+    setQuestions: (state, action: PayloadAction<SetQuestionsPayloadType>) => {
+      if (state.questions) {
+        switch (action.payload.type) {
+          case "ADD":
+            state.lastOptionNumber += 1;
+            state.questions.push({
+              id: state.lastOptionNumber,
+              value: `옵션 ${state.lastOptionNumber}`,
+            });
+            break;
+          case "DELETE": {
+            const { id: payloadId } = action.payload as {
+              type: "DELETE";
+              id: number;
+            };
+            state.questions = state.questions.filter(
+              ({ id }) => id !== payloadId
+            );
+            break;
+          }
+          case "UPDATE": {
+            const { id, value } = action.payload as {
+              type: "UPDATE";
+              id: number;
+              value: string;
+            };
+            state.questions = state.questions.map((question) => ({
+              ...question,
+              value: question.id === id ? value : question.value,
+            }));
+            break;
+          }
         }
-      } else {
-        state.questions = action.payload;
       }
     },
     setQuestionType: (state, action: PayloadAction<QuestionType>) => {

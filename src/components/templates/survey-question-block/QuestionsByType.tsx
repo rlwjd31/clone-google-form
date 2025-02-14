@@ -2,9 +2,14 @@ import Input from "@/components/atoms/Input";
 import CheckboxGroup from "@/components/organisms/CheckboxGroup";
 import Dropdown from "@/components/organisms/Dropdown";
 import RadioGroup from "@/components/organisms/RadioGroup";
-import { LocalStateType } from "@/components/templates/survey-question-block/slice";
+import {
+  LocalStateActionType,
+  LocalStateType,
+  setQuestions,
+} from "@/components/templates/survey-question-block/slice";
 import { cn } from "@/utils/cn";
-import { useSelector } from "react-redux";
+import { ChangeEvent, FocusEvent } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 type QuestionsByTypeProps = {
   isFocused?: boolean;
@@ -19,6 +24,41 @@ export default function QuestionsByType({
     (state: LocalStateType) => state.questionType
   );
   const questions = useSelector((state: LocalStateType) => state.questions);
+  const dispatch = useDispatch<LocalStateActionType>();
+
+  const deleteOption = (id: number) => {
+    dispatch(
+      setQuestions({
+        type: "DELETE",
+        id,
+      })
+    );
+  };
+
+  const onChangeInputHandler = (
+    e: ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
+    dispatch(
+      setQuestions({
+        type: "UPDATE",
+        id,
+        value: e.target.value,
+      })
+    );
+  };
+
+  const onBlurInputHandler = (e: FocusEvent<HTMLInputElement>, id: number) => {
+    if (e.target.value === "") {
+      dispatch(
+        setQuestions({
+          type: "UPDATE",
+          id,
+          value: `옵션 ${id}`,
+        })
+      );
+    }
+  };
 
   switch (questionType) {
     case "short-text":
@@ -29,22 +69,26 @@ export default function QuestionsByType({
       return (
         <CheckboxGroup
           className={cn(
-            "[&_.input-underline-neutral]:opacity-0",
-            isFocused && "[&_.input-underline-neutral]:hover:opacity-100",
+            !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
             className
           )}
-          options={!Array.isArray(questions) ? [""] : questions}
+          options={!Array.isArray(questions) ? [] : questions}
+          onClickDeleteHandler={deleteOption}
+          onChangeInputHandler={onChangeInputHandler}
+          onBlurInputHandler={onBlurInputHandler}
         />
       );
     case "radio-button":
       return (
         <RadioGroup
           className={cn(
-            "[&_.input-underline-neutral]:opacity-0",
-            isFocused && "[&_.input-underline-neutral]:hover:opacity-100",
+            !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
             className
           )}
-          options={!Array.isArray(questions) ? [""] : questions}
+          options={!Array.isArray(questions) ? [] : questions}
+          onClickDeleteHandler={deleteOption}
+          onChangeInputHandler={onChangeInputHandler}
+          onBlurInputHandler={onBlurInputHandler}
         />
       );
     case "arrow-drop-down-circle":

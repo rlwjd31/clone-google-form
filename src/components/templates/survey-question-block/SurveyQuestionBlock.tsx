@@ -5,6 +5,7 @@ import QuestionsByType from "@/components/templates/survey-question-block/Questi
 import {
   LocalStateActionType,
   LocalStateType,
+  setQuestions,
   setQuestionTitle,
   setQuestionType,
   SurveyQuestionBlockStore,
@@ -17,10 +18,11 @@ import { useRef, useState } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 
 function SurveyQuestionBlock() {
-  const { questionTitle, questionType } = useSelector(
+  const { questionTitle, questionType, isRequired } = useSelector(
     (state: LocalStateType) => ({
       questionTitle: state.questionTitle,
       questionType: state.questionType,
+      isRequired: state.isRequired,
     })
   );
   const dispatch = useDispatch<LocalStateActionType>();
@@ -28,9 +30,20 @@ function SurveyQuestionBlock() {
   const [isCardFocused, setIsCardFocused] = useState(false);
   useClickOutside(cardRef, () => setIsCardFocused(false));
 
-  const setDropdownValue = (value: QuestionType) => {
-    dispatch(setQuestionType(value));
+  const setDropdownValue = (value: QuestionType | string) => {
+    dispatch(setQuestionType(value as QuestionType));
   };
+
+  const addOption = () => {
+    dispatch(
+      setQuestions({
+        type: "ADD",
+      })
+    );
+  };
+
+  const isOptionAddButtonShouldeBeRender =
+    questionType !== "long-text" && questionType !== "short-text";
 
   return (
     <Card
@@ -39,29 +52,48 @@ function SurveyQuestionBlock() {
       onClick={() => setIsCardFocused(true)}
       className={isCardFocused ? "" : "pb-8"}
     >
-      <div className="mb-6 flex items-start gap-12">
-        <Input.SubTitle
-          className={cn(!isCardFocused && "[&_div]:opacity-0")}
-          inputStyle={cn(
-            !isCardFocused && "bg-card hover:bg-card text-neutral-800"
+      <div className="mb-6 flex items-start gap-8">
+        <div className="relative w-full">
+          <Input.SubTitle
+            className={cn(
+              !isCardFocused
+                ? "[&_div]:opacity-0 [&_.input-underline-neutral]:hover:opacity-0"
+                : "[&_div]:opacity-100"
+            )}
+            inputStyle={cn(
+              !isCardFocused && "bg-card hover:bg-card text-neutral-800"
+            )}
+            value={questionTitle}
+            onChange={(e) => dispatch(setQuestionTitle(e.target.value))}
+            onBlur={(e) => {
+              if (e.target.value === "") {
+                dispatch(setQuestionTitle("질문"));
+              }
+            }}
+          />
+          {!isCardFocused && isRequired && (
+            <span className="absolute left-0 top-0 translate-x-1 translate-y-4 text-lg text-red-600">
+              *
+            </span>
           )}
-          value={questionTitle}
-          onChange={(e) => dispatch(setQuestionTitle(e.target.value))}
-        />
-        {isCardFocused && <Dropdown setValue={setDropdownValue} />}
+        </div>
+        {isCardFocused && (
+          <Dropdown questionType={questionType} setValue={setDropdownValue} />
+        )}
       </div>
       <QuestionsByType
         className={cn(!isCardFocused && "[&_.hidden-preview-mode]:hidden")}
         isFocused={isCardFocused}
       />
 
-      {isCardFocused &&
-        questionType !== "long-text" &&
-        questionType !== "short-text" && (
-          <button className="items-cener mt-4 cursor-pointer self-start rounded-md border border-neutral-300 px-4 py-2 shadow-sm">
-            옵션 추가
-          </button>
-        )}
+      {isCardFocused && isOptionAddButtonShouldeBeRender && (
+        <button
+          onClick={addOption}
+          className="items-cener mt-4 cursor-pointer self-start rounded-md border border-neutral-300 px-4 py-2 shadow-sm"
+        >
+          옵션 추가
+        </button>
+      )}
 
       {isCardFocused && <SurveyQuestionBlockFooter />}
     </Card>
