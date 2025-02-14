@@ -3,9 +3,9 @@ import { cn } from "@/utils/cn";
 import { ComponentProps, useState } from "react";
 
 type RadioGroupProps = ComponentProps<"div"> & {
-  options: string[];
+  options: Array<{ id: number; value: string }>;
   className?: string;
-  onClickDeleteHandler?: (value: string) => void;
+  onClickDeleteHandler?: (id: number) => void;
 };
 
 export default function CheckboxGroup({
@@ -25,13 +25,14 @@ export default function CheckboxGroup({
 
   return (
     <div className={cn("flex flex-col gap-1", className)}>
-      {options.map((option, idx) => (
+      {options.map(({ id, value }, idx) => (
         <CheckboxOption
-          isActivated={selectedValue.includes(option)}
-          onClickHandler={() => toggleSelectedValue(option)}
-          value={option ?? `옵션 ${idx + 1}`}
+          key={id}
+          isActivated={selectedValue.includes(value)}
+          onClickHandler={() => toggleSelectedValue(value)}
+          value={value ?? `옵션 ${idx + 1}`}
           onClickDeleteHandler={() =>
-            onClickDeleteHandler ? onClickDeleteHandler(option) : (() => {})()
+            onClickDeleteHandler ? onClickDeleteHandler(id) : (() => {})()
           }
         />
       ))}

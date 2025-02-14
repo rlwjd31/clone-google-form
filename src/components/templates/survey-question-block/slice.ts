@@ -1,11 +1,16 @@
 import { QuestionType } from "@/types/question.type";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type Question = {
+  id: number;
+  value: string;
+};
+
 type Questions<T extends QuestionType> = T extends
   | "check-box"
   | "radio-button"
   | "dropdown"
-  ? string[]
+  ? Question[]
   : undefined;
 
 type SurveyQuestionBlockState<T extends QuestionType> = {
@@ -19,10 +24,14 @@ type SurveyQuestionBlockState<T extends QuestionType> = {
 type SetQuestionsPayloadType =
   | {
       type: "ADD";
-      value?: undefined;
     }
   | {
       type: "DELETE";
+      id: number;
+    }
+  | {
+      type: "UPDATE";
+      id: number;
       value: string;
     };
 
@@ -35,7 +44,11 @@ const getInitialState = <T extends QuestionType>(
     questions: (type === "check-box" ||
     type === "radio-button" ||
     type === "arrow-drop-down-circle"
-      ? ["옵션 1", "옵션 2", "옵션 3"]
+      ? [
+          { id: 1, value: "옵션 1" },
+          { id: 2, value: "옵션 2" },
+          { id: 3, value: "옵션 3" },
+        ]
       : undefined) as Questions<T>,
     questionType: type,
     isRequired: false,
@@ -58,13 +71,21 @@ const surveyQuestionBlockSlice = createSlice({
         switch (action.payload.type) {
           case "ADD":
             state.lastOptionNumber += 1;
-            state.questions.push(`옵션 ${state.lastOptionNumber}`);
+            state.questions.push({
+              id: state.lastOptionNumber,
+              value: `옵션 ${state.lastOptionNumber}`,
+            });
             break;
-          case "DELETE":
+          case "DELETE": {
+            const { id: payloadId } = action.payload as {
+              type: "DELETE";
+              id: number;
+            };
             state.questions = state.questions.filter(
-              (value) => value !== action.payload.value
+              ({ id }) => id !== payloadId
             );
             break;
+          }
         }
       }
     },

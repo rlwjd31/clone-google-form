@@ -3,9 +3,9 @@ import { cn } from "@/utils/cn";
 import { ComponentProps, useState } from "react";
 
 type RadioGroupProps = ComponentProps<"div"> & {
-  options: string[];
+  options: Array<{ id: number; value: string }>;
   className?: string;
-  onClickDeleteHandler?: (value: string) => void;
+  onClickDeleteHandler?: (id: number) => void;
 };
 
 export default function RadioGroup({
@@ -19,15 +19,16 @@ export default function RadioGroup({
 
   return (
     <div className={cn("flex flex-col gap-1", className)}>
-      {options.map((option, idx) => (
+      {options.map(({ id, value }, idx) => (
         <RadioOption
-          isActivated={option === selectedValue}
+          key={id}
+          isActivated={value === selectedValue}
           onClickHandler={() =>
-            setSelectedValue((prev) => (prev !== option ? option : ""))
+            setSelectedValue((prev) => (prev !== value ? value : ""))
           }
-          value={option ?? `옵션 ${idx + 1}`}
+          value={value ?? `옵션 ${idx + 1}`}
           onClickDeleteHandler={() =>
-            onClickDeleteHandler ? onClickDeleteHandler(option) : (() => {})()
+            onClickDeleteHandler ? onClickDeleteHandler(id) : (() => {})()
           }
         />
       ))}

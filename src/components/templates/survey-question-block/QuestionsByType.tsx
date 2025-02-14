@@ -25,11 +25,11 @@ export default function QuestionsByType({
   const questions = useSelector((state: LocalStateType) => state.questions);
   const dispatch = useDispatch<LocalStateActionType>();
 
-  const deleteOption = (value: string) => {
+  const deleteOption = (id: number) => {
     dispatch(
       setQuestions({
         type: "DELETE",
-        value,
+        id,
       })
     );
   };
@@ -46,7 +46,7 @@ export default function QuestionsByType({
             !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
             className
           )}
-          options={!Array.isArray(questions) ? [""] : questions}
+          options={!Array.isArray(questions) ? [] : questions}
           onClickDeleteHandler={deleteOption}
         />
       );
