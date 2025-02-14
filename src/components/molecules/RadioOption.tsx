@@ -28,7 +28,7 @@ export default function RadioOption({
       </div>
       <div
         className={cn(
-          "flex w-full cursor-pointer items-center gap-2 py-1",
+          "flex w-full items-center gap-2 py-1",
           className
         )}
         {...others}

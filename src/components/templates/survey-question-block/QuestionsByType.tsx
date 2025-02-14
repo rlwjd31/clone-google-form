@@ -29,8 +29,7 @@ export default function QuestionsByType({
       return (
         <CheckboxGroup
           className={cn(
-            "[&_.input-underline-neutral]:opacity-0",
-            isFocused && "[&_.input-underline-neutral]:hover:opacity-100",
+            !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
             className
           )}
           options={!Array.isArray(questions) ? [""] : questions}
@@ -40,8 +39,7 @@ export default function QuestionsByType({
       return (
         <RadioGroup
           className={cn(
-            "[&_.input-underline-neutral]:opacity-0",
-            isFocused && "[&_.input-underline-neutral]:hover:opacity-100",
+            !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
             className
           )}
           options={!Array.isArray(questions) ? [""] : questions}

@@ -27,10 +27,7 @@ export default function CheckboxOption({
         <Icon type="drag-indicator" />
       </div>
       <div
-        className={cn(
-          "flex w-full cursor-pointer items-center gap-2 py-1",
-          className
-        )}
+        className={cn("flex w-full items-center gap-2 py-1", className)}
         {...others}
       >
         <Checkbox isActivated={isActivated} onClick={onClickHandler} disabled />

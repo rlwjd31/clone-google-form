@@ -41,7 +41,11 @@ function SurveyQuestionBlock() {
     >
       <div className="mb-6 flex items-start gap-12">
         <Input.SubTitle
-          className={cn(!isCardFocused && "[&_div]:opacity-0")}
+          className={cn(
+            !isCardFocused
+              ? "[&_div]:opacity-0 [&_.input-underline-neutral]:hover:opacity-0"
+              : "[&_div]:opacity-100"
+          )}
           inputStyle={cn(
             !isCardFocused && "bg-card hover:bg-card text-neutral-800"
           )}
