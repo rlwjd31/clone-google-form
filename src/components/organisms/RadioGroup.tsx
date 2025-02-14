@@ -1,9 +1,10 @@
 import RadioOption from "@/components/molecules/RadioOption";
+import { OptionType } from "@/types/option.type";
 import { cn } from "@/utils/cn";
 import { ChangeEvent, ComponentProps, FocusEvent, useState } from "react";
 
 type RadioGroupProps = ComponentProps<"div"> & {
-  options: Array<{ id: number; value: string }>;
+  options: Array<OptionType>;
   className?: string;
   onClickDeleteHandler?: (id: number) => void;
   onChangeInputHandler: (e: ChangeEvent<HTMLInputElement>, id: number) => void;
@@ -23,19 +24,19 @@ export default function RadioGroup({
 
   return (
     <div className={cn("flex flex-col gap-1", className)}>
-      {options.map(({ id, value }, idx) => (
+      {options.map(({ optionId, value }, idx) => (
         <RadioOption
-          key={id}
+          key={optionId}
           isActivated={value === selectedValue}
           onClickHandler={() =>
             setSelectedValue((prev) => (prev !== value ? value : ""))
           }
           value={value ?? `옵션 ${idx + 1}`}
           onClickDeleteHandler={() =>
-            onClickDeleteHandler ? onClickDeleteHandler(id) : (() => {})()
+            onClickDeleteHandler ? onClickDeleteHandler(optionId) : (() => {})()
           }
-          onChangeInputHandler={(e) => onChangeInputHandler(e, id)}
-          onBlurInputHandler={(e) => onBlurInputHandler(e, id)}
+          onChangeInputHandler={(e) => onChangeInputHandler(e, optionId)}
+          onBlurInputHandler={(e) => onBlurInputHandler(e, optionId)}
         />
       ))}
     </div>

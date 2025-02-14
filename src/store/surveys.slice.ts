@@ -1,10 +1,8 @@
+import { OptionType } from "@/types/option.type";
 import { QuestionType } from "@/types/question.type";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Question = {
-  optionId: number;
-  value: string;
-};
+type Question = OptionType
 
 type Questions<T extends QuestionType> = T extends
   | "check-box"
@@ -95,8 +93,6 @@ const surveysSlice = createSlice({
       if (survey) {
         survey.state.questionTitle = value;
       }
-      // console.log(survey);
-      // state.surveysState[surveyId].state.questionTitle = value;
     },
     setQuestions: (state, action: PayloadAction<SetQuestionsPayloadType>) => {
       const { surveyId } = action.payload;

@@ -1,9 +1,10 @@
 import CheckboxOption from "@/components/molecules/CheckboxOption";
+import { OptionType } from "@/types/option.type";
 import { cn } from "@/utils/cn";
 import { ChangeEvent,  ComponentProps, FocusEvent, useState } from "react";
 
 type RadioGroupProps = ComponentProps<"div"> & {
-  options: Array<{ id: number; value: string }>;
+  options: Array<OptionType>;
   className?: string;
   onClickDeleteHandler?: (id: number) => void;
   onChangeInputHandler: (e: ChangeEvent<HTMLInputElement>, id: number) => void;
@@ -29,17 +30,17 @@ export default function CheckboxGroup({
 
   return (
     <div className={cn("flex flex-col gap-1", className)}>
-      {options.map(({ id, value }, idx) => (
+      {options.map(({ optionId, value }, idx) => (
         <CheckboxOption
-          key={id}
+          key={optionId}
           isActivated={selectedValue.includes(value)}
           onClickHandler={() => toggleSelectedValue(value)}
           value={value ?? `옵션 ${idx + 1}`}
           onClickDeleteHandler={() =>
-            onClickDeleteHandler ? onClickDeleteHandler(id) : (() => {})()
+            onClickDeleteHandler ? onClickDeleteHandler(optionId) : (() => {})()
           }
-          onChangeInputHandler={(e) => onChangeInputHandler(e, id)}
-          onBlurInputHandler={(e) => onBlurInputHandler(e, id)}
+          onChangeInputHandler={(e) => onChangeInputHandler(e, optionId)}
+          onBlurInputHandler={(e) => onBlurInputHandler(e, optionId)}
         />
       ))}
     </div>
