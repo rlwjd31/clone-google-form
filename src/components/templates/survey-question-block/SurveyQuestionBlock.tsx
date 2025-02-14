@@ -5,6 +5,7 @@ import QuestionsByType from "@/components/templates/survey-question-block/Questi
 import {
   LocalStateActionType,
   LocalStateType,
+  setQuestions,
   setQuestionTitle,
   setQuestionType,
   SurveyQuestionBlockStore,
@@ -17,10 +18,11 @@ import { useRef, useState } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 
 function SurveyQuestionBlock() {
-  const { questionTitle, questionType } = useSelector(
+  const { questionTitle, questionType, questions } = useSelector(
     (state: LocalStateType) => ({
       questionTitle: state.questionTitle,
       questionType: state.questionType,
+      questions: state.questions,
     })
   );
   const dispatch = useDispatch<LocalStateActionType>();
@@ -30,6 +32,10 @@ function SurveyQuestionBlock() {
 
   const setDropdownValue = (value: QuestionType) => {
     dispatch(setQuestionType(value));
+  };
+
+  const addOption = () => {
+    dispatch(setQuestions(`옵션 ${questions.length + 1}`));
   };
 
   const isOptionAddButtonShouldeBeRender =
@@ -55,7 +61,9 @@ function SurveyQuestionBlock() {
           value={questionTitle}
           onChange={(e) => dispatch(setQuestionTitle(e.target.value))}
         />
-        {isCardFocused && <Dropdown setValue={setDropdownValue} />}
+        {isCardFocused && (
+          <Dropdown questionType={questionType} setValue={setDropdownValue} />
+        )}
       </div>
       <QuestionsByType
         className={cn(!isCardFocused && "[&_.hidden-preview-mode]:hidden")}
