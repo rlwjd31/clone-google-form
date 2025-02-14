@@ -8,6 +8,7 @@ import {
   setQuestions,
 } from "@/components/templates/survey-question-block/slice";
 import { cn } from "@/utils/cn";
+import { ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 type QuestionsByTypeProps = {
@@ -34,6 +35,19 @@ export default function QuestionsByType({
     );
   };
 
+  const onChangeInputHandler = (
+    e: ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
+    dispatch(
+      setQuestions({
+        type: "UPDATE",
+        id,
+        value: e.target.value,
+      })
+    );
+  };
+
   switch (questionType) {
     case "short-text":
       return <Input.Description placeholder="단답형" disabled />;
@@ -48,6 +62,7 @@ export default function QuestionsByType({
           )}
           options={!Array.isArray(questions) ? [] : questions}
           onClickDeleteHandler={deleteOption}
+          onChangeInputHandler={onChangeInputHandler}
         />
       );
     case "radio-button":
@@ -57,8 +72,9 @@ export default function QuestionsByType({
             !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
             className
           )}
-          options={!Array.isArray(questions) ? [""] : questions}
+          options={!Array.isArray(questions) ? [] : questions}
           onClickDeleteHandler={deleteOption}
+          onChangeInputHandler={onChangeInputHandler}
         />
       );
     case "arrow-drop-down-circle":

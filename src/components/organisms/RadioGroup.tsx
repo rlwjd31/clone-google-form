@@ -1,12 +1,12 @@
 import RadioOption from "@/components/molecules/RadioOption";
 import { cn } from "@/utils/cn";
-import { ChangeEventHandler, ComponentProps, useState } from "react";
+import { ChangeEvent, ComponentProps, useState } from "react";
 
 type RadioGroupProps = ComponentProps<"div"> & {
   options: Array<{ id: number; value: string }>;
   className?: string;
   onClickDeleteHandler?: (id: number) => void;
-  onChangeInputHandler: ChangeEventHandler<HTMLInputElement>;
+  onChangeInputHandler: (e: ChangeEvent<HTMLInputElement>, id: number) => void;
 };
 
 export default function RadioGroup({
@@ -32,7 +32,7 @@ export default function RadioGroup({
           onClickDeleteHandler={() =>
             onClickDeleteHandler ? onClickDeleteHandler(id) : (() => {})()
           }
-          onChangeInputHandler={onChangeInputHandler}
+          onChangeInputHandler={(e) => onChangeInputHandler(e, id)}
         />
       ))}
     </div>

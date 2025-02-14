@@ -86,6 +86,18 @@ const surveyQuestionBlockSlice = createSlice({
             );
             break;
           }
+          case "UPDATE": {
+            const { id, value } = action.payload as {
+              type: "UPDATE";
+              id: number;
+              value: string;
+            };
+            state.questions = state.questions.map((question) => ({
+              ...question,
+              value: question.id === id ? value : question.value,
+            }));
+            break;
+          }
         }
       }
     },
