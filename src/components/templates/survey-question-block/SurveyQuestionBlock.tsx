@@ -4,27 +4,38 @@ import Dropdown from "@/components/organisms/Dropdown";
 import QuestionsByType from "@/components/templates/survey-question-block/QuestionsByType";
 import {
   LocalStateActionType,
-  LocalStateType,
+  // LocalStateType,
   setQuestions,
-  setQuestionTitle,
   setQuestionType,
-  SurveyQuestionBlockStore,
+  // SurveyQuestionBlockStore,
 } from "@/components/templates/survey-question-block/slice";
 import SurveyQuestionBlockFooter from "@/components/templates/survey-question-block/SurveyQuestionBlockFooter";
 import useClickOutside from "@/hooks/useClickOustside";
+import { useSurveyIdContext } from "@/store/SurveyIdProvider";
+import { GlobalState, setQuestionTitle } from "@/store/surveys.slice";
 import { QuestionType } from "@/types/question.type";
 import { cn } from "@/utils/cn";
-import { useRef, useState } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { ChangeEvent, useRef, useState } from "react";
+import {
+  // Provider,
+  useDispatch,
+  useSelector,
+} from "react-redux";
 
-function SurveyQuestionBlock() {
-  const { questionTitle, questionType, isRequired } = useSelector(
-    (state: LocalStateType) => ({
-      questionTitle: state.questionTitle,
-      questionType: state.questionType,
-      isRequired: state.isRequired,
+export default function SurveyQuestionBlock() {
+  const surveyId = useSurveyIdContext();
+  // const { questionType, isRequired } = useSelector((state: LocalStateType) => ({
+  //   questionTitle: state.questionTitle,
+  //   questionType: state.questionType,
+  //   isRequired: state.isRequired,
+  // }));
+  const { questionTitle, isRequired, questionType } = useSelector(
+    (state: GlobalState) => ({
+      ...state.surveysState.find((survey) => survey.surveyId === surveyId)
+        ?.state,
     })
   );
+
   const dispatch = useDispatch<LocalStateActionType>();
   const cardRef = useRef<HTMLDivElement>(null);
   const [isCardFocused, setIsCardFocused] = useState(false);
@@ -64,10 +75,12 @@ function SurveyQuestionBlock() {
               !isCardFocused && "bg-card hover:bg-card text-neutral-800"
             )}
             value={questionTitle}
-            onChange={(e) => dispatch(setQuestionTitle(e.target.value))}
+            onChange={(e) =>
+              dispatch(setQuestionTitle({ surveyId, value: e.target.value }))
+            }
             onBlur={(e) => {
               if (e.target.value === "") {
-                dispatch(setQuestionTitle("질문"));
+                dispatch(setQuestionTitle({ surveyId, value: "질문" }));
               }
             }}
           />
@@ -81,10 +94,10 @@ function SurveyQuestionBlock() {
           <Dropdown questionType={questionType} setValue={setDropdownValue} />
         )}
       </div>
-      <QuestionsByType
+      {/* <QuestionsByType
         className={cn(!isCardFocused && "[&_.hidden-preview-mode]:hidden")}
         isFocused={isCardFocused}
-      />
+      /> */}
 
       {isCardFocused && isOptionAddButtonShouldeBeRender && (
         <button
@@ -97,13 +110,5 @@ function SurveyQuestionBlock() {
 
       {isCardFocused && <SurveyQuestionBlockFooter />}
     </Card>
-  );
-}
-
-export default function SurveyQuestionBlockWrapped() {
-  return (
-    <Provider store={SurveyQuestionBlockStore}>
-      <SurveyQuestionBlock />
-    </Provider>
   );
 }

@@ -74,15 +74,13 @@ const initialSurveysState: SurveysState = {
   surveysState: [
     {
       surveyId: 1,
-      state: createInitialSurveyState(
-        "short-text"
-      ) as SurveyState<QuestionType>,
+      state: createInitialSurveyState("check-box") as SurveyState<QuestionType>,
     },
   ],
 };
 
 const surveysSlice = createSlice({
-  name: "sruverysSlice",
+  name: "surverysSlice",
   initialState: initialSurveysState,
   reducers: {
     setQuestionTitle: (
