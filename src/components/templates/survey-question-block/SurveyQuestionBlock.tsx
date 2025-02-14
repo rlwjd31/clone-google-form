@@ -63,6 +63,11 @@ function SurveyQuestionBlock() {
           )}
           value={questionTitle}
           onChange={(e) => dispatch(setQuestionTitle(e.target.value))}
+          onBlur={(e) => {
+            if (e.target.value === "") {
+              dispatch(setQuestionTitle("질문"));
+            }
+          }}
         />
         {isCardFocused && (
           <Dropdown questionType={questionType} setValue={setDropdownValue} />
