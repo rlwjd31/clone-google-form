@@ -18,7 +18,8 @@ export default function Card({
   return (
     <div
       className={cn(
-        "flex relative w-full flex-col bg-card px-6 rounded-lg shadow-md [&:hover>div:first-child]:opacity-100 hover:cursor-move",
+        "flex relative w-full flex-col bg-card px-6 rounded-lg [&:hover>div:first-child]:opacity-100 hover:cursor-move",
+        isCardFocused && "shadow-md",
         className
       )}
       draggable={draggable}
