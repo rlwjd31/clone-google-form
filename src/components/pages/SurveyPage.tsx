@@ -21,17 +21,18 @@ export default function SurveyPage() {
     "[&_div]:opacity-0 [&_.input-underline-neutral]:hover:opacity-0";
   const focusedInputStyle = "[&_div]:opacity-100";
 
-  // @FIXME: 보튼 위치가 survey의 상단에 제대로 위치하지 않음 => focus시 survey의 높이가 늘어나므로 이를 계산해야되는 이슈.
   const setButtonYPosition = (index: number) => {
-    const container = surveyRefs.current[index];
-    if (container) {
-      const rect = container.getBoundingClientRect();
-      setButtonY(rect.top); 
-    }
+    requestAnimationFrame(() => {
+      const container = surveyRefs.current[index];
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        setButtonY(rect.top + window.scrollY); // * 렌더링 후 정확한 top 값 가져오기
+      }
+    });
   };
 
   return (
-    <div className="relative flex w-full flex-col items-center gap-4 pb-10">
+    <div className="relative flex flex-col items-center w-full gap-4 pb-10">
       <AddSurveyButtonIcon positionY={buttonY} />
       <Card
         className="relative w-full pb-6"
@@ -40,8 +41,8 @@ export default function SurveyPage() {
         onClick={() => setIsCardFocused(true)}
         draggable={false}
       >
-        <div className="absolute left-0 top-0 z-20 h-3 w-full rounded-t-md bg-purple-primary" />
-        <div className="flex w-full flex-col gap-1">
+        <div className="absolute top-0 left-0 z-20 w-full h-3 rounded-t-md bg-purple-primary" />
+        <div className="flex flex-col w-full gap-1">
           <Input.Title
             className={cn(
               "mt-6",
@@ -56,7 +57,7 @@ export default function SurveyPage() {
           />
         </div>
       </Card>
-      <div className="relative flex w-full flex-col gap-4">
+      <div className="relative flex flex-col w-full gap-4">
         {surveys.map(({ surveyId }, index) => (
           <SurveyIdProvider surveyIdProp={surveyId}>
             <div
@@ -77,12 +78,12 @@ export default function SurveyPage() {
 function AddSurveyButtonIcon({ positionY }: { positionY: number }) {
   return (
     <div
-      className="absolute right-0 top-0 z-50 transition-all duration-300"
+      className="absolute top-0 right-0 z-50 transition-all duration-300"
       style={{
         transform: `translate(150%, ${positionY - 48}px)`, // 버튼 높이 48px
       }}
     >
-      <ButtonIcon iconType="add-circle" className="rounded-lg bg-card p-2" />
+      <ButtonIcon iconType="add-circle" className="p-2 rounded-lg bg-card" />
     </div>
   );
 }
