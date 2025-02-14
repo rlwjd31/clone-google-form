@@ -32,8 +32,6 @@ function SurveyQuestionBlock() {
     dispatch(setQuestionType(value));
   };
 
-  console.log("questionType", questionType);
-
   return (
     <Card
       isCardFocused={isCardFocused}
@@ -43,10 +41,10 @@ function SurveyQuestionBlock() {
     >
       <div className="mb-6 flex items-start gap-12">
         <Input.SubTitle
-          className={!isCardFocused ? "[&_div]:opacity-0" : ""}
-          inputStyle={
-            !isCardFocused ? "bg-card hover:bg-card text-neutral-800" : ""
-          }
+          className={cn(!isCardFocused && "[&_div]:opacity-0")}
+          inputStyle={cn(
+            !isCardFocused && "bg-card hover:bg-card text-neutral-800"
+          )}
           value={questionTitle}
           onChange={(e) => dispatch(setQuestionTitle(e.target.value))}
         />
@@ -57,11 +55,14 @@ function SurveyQuestionBlock() {
         isFocused={isCardFocused}
       />
 
-      {isCardFocused && (
-        <button className="items-cener mt-4 cursor-pointer self-start rounded-md border border-neutral-300 px-4 py-2 shadow-sm">
-          옵션 추가
-        </button>
-      )}
+      {isCardFocused &&
+        questionType !== "long-text" &&
+        questionType !== "short-text" && (
+          <button className="items-cener mt-4 cursor-pointer self-start rounded-md border border-neutral-300 px-4 py-2 shadow-sm">
+            옵션 추가
+          </button>
+        )}
+
       {isCardFocused && <SurveyQuestionBlockFooter />}
     </Card>
   );

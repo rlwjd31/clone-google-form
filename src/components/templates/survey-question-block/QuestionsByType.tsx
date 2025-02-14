@@ -20,7 +20,6 @@ export default function QuestionsByType({
   );
   const questions = useSelector((state: LocalStateType) => state.questions);
 
-  // console.log('qu');
   switch (questionType) {
     case "short-text":
       return <Input.Description placeholder="단답형" disabled />;

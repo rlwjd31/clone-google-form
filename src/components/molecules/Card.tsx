@@ -14,7 +14,6 @@ export default function Card({
   children,
   ...others
 }: CardProps) {
-  // * !isCardFocused ? "hover:opacity-100" : "opacity-100"
   return (
     <div
       className={cn(
@@ -22,11 +21,9 @@ export default function Card({
         className
       )}
       draggable
-      tabIndex={0}
       {...others}
     >
       {/* drag가 가능한 영역을 알려주는 icon section */}
-
       <div
         className={cn(
           "flex items-center justify-center w-full h-8 cursor-move opacity-0",
