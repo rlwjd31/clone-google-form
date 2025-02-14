@@ -8,7 +8,7 @@ import {
   setQuestions,
 } from "@/components/templates/survey-question-block/slice";
 import { cn } from "@/utils/cn";
-import { ChangeEvent } from "react";
+import { ChangeEvent, FocusEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 type QuestionsByTypeProps = {
@@ -48,6 +48,18 @@ export default function QuestionsByType({
     );
   };
 
+  const onBlurInputHandler = (e: FocusEvent<HTMLInputElement>, id: number) => {
+    if (e.target.value === "") {
+      dispatch(
+        setQuestions({
+          type: "UPDATE",
+          id,
+          value: `옵션 ${id}`,
+        })
+      );
+    }
+  };
+
   switch (questionType) {
     case "short-text":
       return <Input.Description placeholder="단답형" disabled />;
@@ -63,6 +75,7 @@ export default function QuestionsByType({
           options={!Array.isArray(questions) ? [] : questions}
           onClickDeleteHandler={deleteOption}
           onChangeInputHandler={onChangeInputHandler}
+          onBlurInputHandler={onBlurInputHandler}
         />
       );
     case "radio-button":
@@ -75,6 +88,7 @@ export default function QuestionsByType({
           options={!Array.isArray(questions) ? [] : questions}
           onClickDeleteHandler={deleteOption}
           onChangeInputHandler={onChangeInputHandler}
+          onBlurInputHandler={onBlurInputHandler}
         />
       );
     case "arrow-drop-down-circle":

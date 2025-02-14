@@ -1,12 +1,13 @@
 import RadioOption from "@/components/molecules/RadioOption";
 import { cn } from "@/utils/cn";
-import { ChangeEvent, ComponentProps, useState } from "react";
+import { ChangeEvent, ComponentProps, FocusEvent, useState } from "react";
 
 type RadioGroupProps = ComponentProps<"div"> & {
   options: Array<{ id: number; value: string }>;
   className?: string;
   onClickDeleteHandler?: (id: number) => void;
   onChangeInputHandler: (e: ChangeEvent<HTMLInputElement>, id: number) => void;
+  onBlurInputHandler: (e: FocusEvent<HTMLInputElement>, id: number) => void;
 };
 
 export default function RadioGroup({
@@ -14,6 +15,7 @@ export default function RadioGroup({
   options,
   onClickDeleteHandler,
   onChangeInputHandler,
+  onBlurInputHandler,
 }: RadioGroupProps) {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
     undefined
@@ -33,6 +35,7 @@ export default function RadioGroup({
             onClickDeleteHandler ? onClickDeleteHandler(id) : (() => {})()
           }
           onChangeInputHandler={(e) => onChangeInputHandler(e, id)}
+          onBlurInputHandler={(e) => onBlurInputHandler(e, id)}
         />
       ))}
     </div>
