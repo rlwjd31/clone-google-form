@@ -1,6 +1,5 @@
 import Input from "@/components/atoms/Input";
 import CheckboxGroup from "@/components/organisms/CheckboxGroup";
-import Dropdown from "@/components/organisms/Dropdown";
 import DropdownGroup from "@/components/organisms/DropdownGroup";
 import RadioGroup from "@/components/organisms/RadioGroup";
 import { useSurveyIdContext } from "@/store/SurveyIdProvider";
