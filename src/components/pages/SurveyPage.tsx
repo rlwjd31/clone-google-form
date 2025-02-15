@@ -81,7 +81,7 @@ export default function SurveyPage() {
       {/* Survey rendering영역 */}
       <div className="relative flex w-full flex-col gap-4">
         {surveys.map(({ surveyId }, index) => (
-          <SurveyIdProvider surveyIdProp={surveyId}>
+          <SurveyIdProvider key={surveyId} surveyIdProp={surveyId}>
             <div
               ref={(element) => {
                 surveyRefs.current[index] = element!;

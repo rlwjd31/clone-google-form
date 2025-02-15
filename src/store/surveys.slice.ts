@@ -176,6 +176,12 @@ const surveysSlice = createSlice({
         },
       });
     },
+    deleteQuestion: (state, action: PayloadAction<{ surveyId: number }>) => {
+      state.surveysState = state.surveysState.filter(
+        (survey) => survey.surveyId !== action.payload.surveyId
+      );
+
+    }
   },
 });
 
@@ -187,6 +193,7 @@ export const {
   setSurveyTitle,
   setDescription,
   copyQuestion,
+  deleteQuestion
 } = surveysSlice.actions;
 
 export const SurveysStore = configureStore({
