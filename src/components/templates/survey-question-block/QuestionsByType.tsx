@@ -1,6 +1,7 @@
 import Input from "@/components/atoms/Input";
 import CheckboxGroup from "@/components/organisms/CheckboxGroup";
 import Dropdown from "@/components/organisms/Dropdown";
+import DropdownGroup from "@/components/organisms/DropdownGroup";
 import RadioGroup from "@/components/organisms/RadioGroup";
 import { useSurveyIdContext } from "@/store/SurveyIdProvider";
 import {
@@ -97,7 +98,18 @@ export default function QuestionsByType({
       );
     case "arrow-drop-down-circle":
       // TODO: dropdown에 해당되는 UI구현
-      return <Dropdown />;
+      return (
+        <DropdownGroup
+          className={cn(
+            !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
+            className
+          )}
+          options={!Array.isArray(questions) ? [] : questions}
+          onClickDeleteHandler={deleteOption}
+          onChangeInputHandler={onChangeInputHandler}
+          onBlurInputHandler={onBlurInputHandler}
+        />
+      );
   }
   return <div>해당 질문 종류는 존재하지 않습니다.</div>;
 }

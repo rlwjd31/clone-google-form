@@ -3,15 +3,22 @@ import ButtonIcon from "@/components/molecules/ButtonIcon";
 import Card from "@/components/molecules/Card";
 import SurveyQuestionBlock from "@/components/templates/survey-question-block/SurveyQuestionBlock";
 import useClickOutside from "@/hooks/useClickOustside";
-import { SurveyIdProvider, useSurveyIdContext } from "@/store/SurveyIdProvider";
+import { SurveyIdProvider } from "@/store/SurveyIdProvider";
 import {
   GlobalActionType,
   GlobalState,
   setSurveyTitle,
   setDescription,
   addSurvey,
+  reorderSurveys,
 } from "@/store/surveys.slice";
 import { cn } from "@/utils/cn";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "@hello-pangea/dnd";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -48,6 +55,18 @@ export default function SurveyPage() {
     return top + window.scrollY;
   };
 
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+    dispatch(
+      reorderSurveys({
+        startIndex: result.source.index,
+        endIndex: result.destination.index,
+      })
+    );
+  };
+
   return (
     <div className="relative flex w-full flex-col items-center gap-4 pb-10">
       <AddSurveyButtonIcon
@@ -82,20 +101,51 @@ export default function SurveyPage() {
           />
         </div>
       </Card>
+
       {/* Survey rendering영역 */}
       <div className="relative flex w-full flex-col gap-4">
-        {surveys.map(({ surveyId }, index) => (
-          <SurveyIdProvider key={surveyId} surveyIdProp={surveyId}>
-            <div
-              ref={(element) => {
-                surveyRefs.current[index] = element!;
-              }}
-              onClick={() => setButtonYPosition(index)}
-            >
-              <SurveyQuestionBlock />
-            </div>
-          </SurveyIdProvider>
-        ))}
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="relative flex w-full flex-col gap-4"
+              >
+                {surveys.map(({ surveyId }, index) => (
+                  // draggableId와 key는 서로같아야한다.
+                  <Draggable
+                    draggableId={surveyId.toString()}
+                    index={index}
+                    key={surveyId.toString()}
+                  >
+                    {(provided) => (
+                      <div
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                      >
+                        {/* SurveyIdProvider가 아래 div보다 밖에 있으면 draggable하지 않음 */}
+                        <div
+                          key={surveyId}
+                          ref={(element) => {
+                            surveyRefs.current[index] = element!;
+                          }}
+                          onClick={() => setButtonYPosition(index)}
+                        >
+                          <SurveyIdProvider surveyIdProp={surveyId}>
+                            <SurveyQuestionBlock />
+                          </SurveyIdProvider>
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
     </div>
   );
