@@ -9,6 +9,7 @@ export default {
         "purple-secondary": "#F0EBF8",
         card: "#FFFFFF",
         "blue-primary": "#4285f4",
+        "red-primary": "#C23729",
       },
       backgroundImage: {
         "dot-pattern": "radial-gradient(circle, black 1px, transparent 1px)",
@@ -53,17 +54,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 };
-
-// "primary": "#3C64B1",
-// "secondary": "#F2F2F2",
-// "tertiary": "#F8F8F8",
-// "quaternary": "#E5E5E5",
-// "quinary": "#D8D8D8",
-// "senary": "#BFBFBF",
-// "septenary": "#A6A6A6",
-// "octonary": "#8C8C8C",
-// "nonary": "#737373",
-// "denary": "#595959",
-// "elevenary": "#404040",
-// "twelvary": "#262626",
-// "thirteenary": "#0D0D0D",
