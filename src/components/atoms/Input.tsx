@@ -8,7 +8,7 @@ type InputProps = ComponentProps<"input"> & {
 
 const defaultInputStyle = "size-full focus:outline-none";
 const underlineNeuralStyle =
-  "absolute bottom-0 w-full h-[1px] bg-neutral-400 opacity-0";
+  "absolute bottom-0 w-full h-[1px] bg-neutral-300 opacity-0";
 const underlinePurpleStyle =
   "absolute w-full scale-0 bottom-0 translate-[-50%] h-[2px] transition-all duration-200 bg-purple-primary group-focus-within:scale-100";
 
@@ -77,7 +77,7 @@ const Title: FC<InputProps> = ({
         placeholder="제목 없는 설문지"
         className={cn(
           defaultInputStyle,
-          "text-4xl py-3 font-normal placeholder:text-neutral-700",
+          "text-4xl py-3 font-normal placeholder:text-neutral-500",
           disabled && "bg-card",
           inputStyle
         )}

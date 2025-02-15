@@ -2,7 +2,7 @@ import { OptionType } from "@/types/option.type";
 import { QuestionType } from "@/types/question.type";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Question = OptionType
+type Question = OptionType;
 
 type Questions<T extends QuestionType> = T extends
   | "check-box"
@@ -60,14 +60,14 @@ const createInitialSurveyState = <T extends QuestionType>(
 
 type SurveysState = {
   lastSurveyId: number;
-  bigQuestionTitle: string;
+  surveyTitle: string;
   description: string;
   surveysState: Array<{ surveyId: number; state: SurveyState<QuestionType> }>;
 };
 
 const initialSurveysState: SurveysState = {
   lastSurveyId: 1,
-  bigQuestionTitle: "제목 없는 설문지",
+  surveyTitle: "제목 없는 설문지",
   description: "설문지 설명",
   surveysState: [
     {
@@ -159,8 +159,11 @@ const surveysSlice = createSlice({
         survey.state.isRequired = isRequired;
       }
     },
-    setBigQuestionTitle: (state, action: PayloadAction<string>) => {
-      state.bigQuestionTitle = action.payload;
+    setSurveyTitle: (state, action: PayloadAction<string>) => {
+      state.surveyTitle = action.payload;
+    },
+    setDescription: (state, action: PayloadAction<string>) => {
+      state.description = action.payload;
     },
   },
 });
@@ -170,6 +173,8 @@ export const {
   setQuestions,
   setQuestionType,
   setIsRequired,
+  setSurveyTitle,
+  setDescription,
 } = surveysSlice.actions;
 
 export const SurveysStore = configureStore({
