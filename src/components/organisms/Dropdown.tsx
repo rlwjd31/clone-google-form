@@ -18,7 +18,7 @@ type DropdownProps = ComponentProps<"div"> & {
   className?: string;
   questionType?: QuestionType;
   contents?: OptionType[];
-  setValue: (value: OptionType | QuestionType) => void;
+  setValue?: (value: OptionType | QuestionType) => void;
 };
 
 export default function Dropdown({

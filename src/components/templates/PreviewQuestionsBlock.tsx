@@ -1,7 +1,5 @@
 import Input from "@/components/atoms/Input";
 import Card from "@/components/molecules/Card";
-import QuestionsByType from "@/components/templates/survey-question-block/QuestionsByType";
-import DropdownGroup from "@/components/organisms/DropdownGroup";
 import { useSurveyIdContext } from "@/store/SurveyIdProvider";
 import { GlobalState } from "@/store/surveys.slice";
 import { cn } from "@/utils/cn";
@@ -12,20 +10,17 @@ import Dropdown from "@/components/organisms/Dropdown";
 
 export default function PreviewQuestionsBlock() {
   const surveyId = useSurveyIdContext();
-  const { questionTitle, isRequired, questions } = useSelector(
-    (state: GlobalState) => ({
-      ...state.surveysState.find((survey) => survey.surveyId === surveyId)
-        ?.state,
-    })
-  );
+  const { questionTitle, isRequired } = useSelector((state: GlobalState) => ({
+    ...state.surveysState.find((survey) => survey.surveyId === surveyId)?.state,
+  }));
 
   return (
     <Card className="pb-8">
-      <div className="flex items-start gap-8 mb-6">
+      <div className="flex items-start gap-2 pt-4">
         <div className="relative w-full">
-          <Input.SubTitle disabled value={questionTitle} />
+          <Input.SubTitle disabled value={questionTitle} inputStyle="px-2" />
           {isRequired && (
-            <span className="absolute top-0 left-0 text-lg text-red-600 translate-x-1 translate-y-4">
+            <span className="absolute left-0 top-0 translate-x-1 translate-y-4 text-lg text-red-600">
               *
             </span>
           )}
@@ -44,9 +39,9 @@ function PreviewQuestionsByType() {
 
   switch (questionType) {
     case "short-text":
-      return <Input.Description placeholder="단답형" />;
+      return <Input.Description inputStyle="ml-[10px]" placeholder="단답형" />;
     case "long-text":
-      return <Input.Description placeholder="장문형" />;
+      return <Input.Description inputStyle="ml-[10px]" placeholder="장문형" />;
     case "check-box":
       return (
         <PreviewCheckboxGroup
@@ -60,8 +55,7 @@ function PreviewQuestionsByType() {
         />
       );
     case "arrow-drop-down-circle":
-      // TODO: dropdown에 해당되는 UI구현
-      return <Dropdown contents={questions} />;
+      return <Dropdown className="ml-1" contents={questions} />;
   }
   return <div>해당 질문 종류는 존재하지 않습니다.</div>;
 }
