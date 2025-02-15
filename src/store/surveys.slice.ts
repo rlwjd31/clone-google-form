@@ -162,7 +162,7 @@ const surveysSlice = createSlice({
     setDescription: (state, action: PayloadAction<string>) => {
       state.description = action.payload;
     },
-    copyQuestion: (state, action: PayloadAction<{ surveyId: number }>) => {
+    copySurvey: (state, action: PayloadAction<{ surveyId: number }>) => {
       const nextLastSurveyId = state.lastSurveyId + 1;
       state.lastSurveyId = nextLastSurveyId;
 
@@ -179,10 +179,19 @@ const surveysSlice = createSlice({
         });
       }
     },
-    deleteQuestion: (state, action: PayloadAction<{ surveyId: number }>) => {
+    deleteSurvey: (state, action: PayloadAction<{ surveyId: number }>) => {
       state.surveysState = state.surveysState.filter(
         (survey) => survey.surveyId !== action.payload.surveyId
       );
+    },
+    addSurvey: (state) => {
+      const nextLastSurveyId = state.lastSurveyId + 1;
+      state.lastSurveyId = nextLastSurveyId;
+
+      state.surveysState.push({
+        surveyId: nextLastSurveyId,
+        state: createInitialSurveyState("radio-button"),
+      });
     },
   },
 });
@@ -194,8 +203,9 @@ export const {
   setIsRequired,
   setSurveyTitle,
   setDescription,
-  copyQuestion,
-  deleteQuestion,
+  copySurvey,
+  deleteSurvey,
+  addSurvey
 } = surveysSlice.actions;
 
 export const SurveysStore = configureStore({

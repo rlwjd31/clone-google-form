@@ -2,8 +2,8 @@ import Toggle from "@/components/atoms/Toggle";
 import ButtonIcon from "@/components/molecules/ButtonIcon";
 import { useSurveyIdContext } from "@/store/SurveyIdProvider";
 import {
-  copyQuestion,
-  deleteQuestion,
+  copySurvey,
+  deleteSurvey,
   GlobalActionType,
   GlobalState,
   setIsRequired,
@@ -22,12 +22,12 @@ export default function SurveyQuestionBlockFooter() {
         iconType="content-copy"
         visibleToolTip
         tooltipPosition="bottom"
-        onClick={() => dispatch(copyQuestion({ surveyId }))}
+        onClick={() => dispatch(copySurvey({ surveyId }))}
       />
       <ButtonIcon
         iconType="delete"
         visibleToolTip
-        onClick={() => dispatch(deleteQuestion({ surveyId }))}
+        onClick={() => dispatch(deleteSurvey({ surveyId }))}
       />
       <div className="ml-3 mr-5 w-px bg-neutral-300" />
       <div className="flex items-center gap-5">

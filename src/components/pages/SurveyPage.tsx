@@ -3,12 +3,13 @@ import ButtonIcon from "@/components/molecules/ButtonIcon";
 import Card from "@/components/molecules/Card";
 import SurveyQuestionBlock from "@/components/templates/survey-question-block/SurveyQuestionBlock";
 import useClickOutside from "@/hooks/useClickOustside";
-import { SurveyIdProvider } from "@/store/SurveyIdProvider";
+import { SurveyIdProvider, useSurveyIdContext } from "@/store/SurveyIdProvider";
 import {
   GlobalActionType,
   GlobalState,
   setSurveyTitle,
   setDescription,
+  addSurvey,
 } from "@/store/surveys.slice";
 import { cn } from "@/utils/cn";
 import { useLayoutEffect, useRef, useState } from "react";
@@ -49,7 +50,10 @@ export default function SurveyPage() {
 
   return (
     <div className="relative flex w-full flex-col items-center gap-4 pb-10">
-      <AddSurveyButtonIcon positionY={buttonY} />
+      <AddSurveyButtonIcon
+        positionY={buttonY}
+        onClick={() => dispatch(addSurvey())}
+      />
       <Card
         className="relative w-full pb-6"
         ref={cardRef}
@@ -97,7 +101,13 @@ export default function SurveyPage() {
   );
 }
 
-function AddSurveyButtonIcon({ positionY }: { positionY: number }) {
+function AddSurveyButtonIcon({
+  positionY,
+  onClick,
+}: {
+  positionY: number;
+  onClick: () => void;
+}) {
   return (
     <div
       className="absolute right-0 top-0 z-50 transition-all duration-300 ease-in"
@@ -105,7 +115,11 @@ function AddSurveyButtonIcon({ positionY }: { positionY: number }) {
         transform: `translate(150%, ${positionY - 48}px)`, // * 버튼 높이 48px
       }}
     >
-      <ButtonIcon iconType="add-circle" className="rounded-lg bg-card p-2" />
+      <ButtonIcon
+        iconType="add-circle"
+        className="rounded-lg bg-card p-2"
+        onClick={onClick}
+      />
     </div>
   );
 }
