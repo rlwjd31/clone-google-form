@@ -40,18 +40,14 @@ const createInitialSurveyState = <T extends QuestionType>(
   type: T
 ): SurveyState<T> => {
   return {
-    lastOptionNumber: 3,
+    lastOptionNumber: 1,
     questionTitle: "",
     questions: ([
       "check-box",
       "radio-button",
       "arrow-drop-down-circle",
     ].includes(type)
-      ? [
-          { optionId: 1, value: "옵션 1" },
-          { optionId: 2, value: "옵션 2" },
-          { optionId: 3, value: "옵션 3" },
-        ]
+      ? [{ optionId: 1, value: "옵션 1" }]
       : undefined) as Questions<T>,
     questionType: type,
     isRequired: false,
@@ -72,7 +68,9 @@ const initialSurveysState: SurveysState = {
   surveysState: [
     {
       surveyId: 1,
-      state: createInitialSurveyState("check-box") as SurveyState<QuestionType>,
+      state: createInitialSurveyState(
+        "radio-button"
+      ) as SurveyState<QuestionType>,
     },
   ],
 };
@@ -165,23 +163,27 @@ const surveysSlice = createSlice({
       state.description = action.payload;
     },
     copyQuestion: (state, action: PayloadAction<{ surveyId: number }>) => {
-      const nextLastSurvyId = state.lastSurveyId + 1;
-      state.lastSurveyId = nextLastSurvyId;
-      state.surveysState.push({
-        surveyId: nextLastSurvyId,
-        state: {
-          ...state.surveysState.find(
-            (survey) => survey.surveyId === action.payload.surveyId
-          )!.state,
-        },
-      });
+      const nextLastSurveyId = state.lastSurveyId + 1;
+      state.lastSurveyId = nextLastSurveyId;
+
+      const targetIndex = state.surveysState.findIndex(
+        (survey) => survey.surveyId === action.payload.surveyId
+      );
+
+      if (targetIndex !== -1) {
+        state.surveysState.splice(targetIndex + 1, 0, {
+          surveyId: nextLastSurveyId,
+          state: {
+            ...state.surveysState[targetIndex].state, // 깊은 복사로 동일한 상태 복사
+          },
+        });
+      }
     },
     deleteQuestion: (state, action: PayloadAction<{ surveyId: number }>) => {
       state.surveysState = state.surveysState.filter(
         (survey) => survey.surveyId !== action.payload.surveyId
       );
-
-    }
+    },
   },
 });
 
@@ -193,7 +195,7 @@ export const {
   setSurveyTitle,
   setDescription,
   copyQuestion,
-  deleteQuestion
+  deleteQuestion,
 } = surveysSlice.actions;
 
 export const SurveysStore = configureStore({
