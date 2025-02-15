@@ -85,7 +85,6 @@ const surveysSlice = createSlice({
       state,
       action: PayloadAction<{ surveyId: number; value: string }>
     ) => {
-      console.log(action.payload);
       const { surveyId, value } = action.payload;
       const survey = state.surveysState.find(
         (state) => state.surveyId === surveyId
@@ -165,6 +164,18 @@ const surveysSlice = createSlice({
     setDescription: (state, action: PayloadAction<string>) => {
       state.description = action.payload;
     },
+    copyQuestion: (state, action: PayloadAction<{ surveyId: number }>) => {
+      const nextLastSurvyId = state.lastSurveyId + 1;
+      state.lastSurveyId = nextLastSurvyId;
+      state.surveysState.push({
+        surveyId: nextLastSurvyId,
+        state: {
+          ...state.surveysState.find(
+            (survey) => survey.surveyId === action.payload.surveyId
+          )!.state,
+        },
+      });
+    },
   },
 });
 
@@ -175,6 +186,7 @@ export const {
   setIsRequired,
   setSurveyTitle,
   setDescription,
+  copyQuestion,
 } = surveysSlice.actions;
 
 export const SurveysStore = configureStore({

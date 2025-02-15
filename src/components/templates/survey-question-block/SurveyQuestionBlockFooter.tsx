@@ -1,7 +1,12 @@
 import Toggle from "@/components/atoms/Toggle";
 import ButtonIcon from "@/components/molecules/ButtonIcon";
 import { useSurveyIdContext } from "@/store/SurveyIdProvider";
-import { GlobalActionType, GlobalState, setIsRequired } from "@/store/surveys.slice";
+import {
+  copyQuestion,
+  GlobalActionType,
+  GlobalState,
+  setIsRequired,
+} from "@/store/surveys.slice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SurveyQuestionBlockFooter() {
@@ -16,6 +21,7 @@ export default function SurveyQuestionBlockFooter() {
         iconType="content-copy"
         visibleToolTip
         tooltipPosition="bottom"
+        onClick={() => dispatch(copyQuestion({ surveyId }))}
       />
       <ButtonIcon iconType="delete" visibleToolTip />
       <div className="w-px ml-3 mr-5 bg-neutral-300" />
@@ -23,9 +29,29 @@ export default function SurveyQuestionBlockFooter() {
         <span>필수</span>
         <Toggle
           enabled={!!isRequired}
-          setEnabled={() => dispatch(setIsRequired({surveyId, isRequired: !isRequired}))}
+          setEnabled={() =>
+            dispatch(setIsRequired({ surveyId, isRequired: !isRequired }))
+          }
         />
       </div>
     </div>
   );
 }
+
+
+ // {
+    //   surveyId: 2,
+    //   state: createInitialSurveyState("check-box") as SurveyState<QuestionType>,
+    // },
+    // {
+    //   surveyId: 3,
+    //   state: createInitialSurveyState("check-box") as SurveyState<QuestionType>,
+    // },
+    // {
+    //   surveyId: 4,
+    //   state: createInitialSurveyState("check-box") as SurveyState<QuestionType>,
+    // },
+    // {
+    //   surveyId: 5,
+    //   state: createInitialSurveyState("check-box") as SurveyState<QuestionType>,
+    // },

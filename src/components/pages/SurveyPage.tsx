@@ -47,8 +47,6 @@ export default function SurveyPage() {
     return top + window.scrollY;
   };
 
-  console.log("surveyTitle", surveyTitle);
-
   return (
     <div className="relative flex w-full flex-col items-center gap-4 pb-10">
       <AddSurveyButtonIcon positionY={buttonY} />
