@@ -1,3 +1,4 @@
+import { OptionType } from "@/types/option.type";
 import { QuestionType } from "@/types/question.type";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -5,7 +6,7 @@ type Questions<T extends QuestionType> = T extends
   | "check-box"
   | "radio-button"
   | "dropdown"
-  ? Array<{ optionId: number; value: string }>
+  ? Array<OptionType>
   : undefined;
 
 export type SurveyState<T extends QuestionType> = {
@@ -37,14 +38,18 @@ const createInitialSurveyState = <T extends QuestionType>(
   type: T
 ): SurveyState<T> => {
   return {
-    lastOptionNumber: 1,
+    lastOptionNumber: 3,
     questionTitle: "",
     questions: ([
       "check-box",
       "radio-button",
       "arrow-drop-down-circle",
     ].includes(type)
-      ? [{ optionId: 1, value: "옵션 1" }]
+      ? [
+          { optionId: 1, value: "옵션 1" },
+          { optionId: 2, value: "옵션 2" },
+          { optionId: 3, value: "옵션 3" },
+        ]
       : undefined) as Questions<T>,
     questionType: type,
     isRequired: false,
@@ -68,6 +73,26 @@ const initialSurveysState: SurveysState = {
       state: createInitialSurveyState(
         "radio-button"
       ) as SurveyState<QuestionType>,
+    },
+    {
+      surveyId: 2,
+      state: createInitialSurveyState("check-box") as SurveyState<QuestionType>,
+    },
+    {
+      surveyId: 3,
+      state: createInitialSurveyState(
+        "arrow-drop-down-circle"
+      ) as SurveyState<QuestionType>,
+    },
+    {
+      surveyId: 4,
+      state: createInitialSurveyState(
+        "short-text"
+      ) as SurveyState<QuestionType>,
+    },
+    {
+      surveyId: 5,
+      state: createInitialSurveyState("long-text") as SurveyState<QuestionType>,
     },
   ],
 };
@@ -190,11 +215,14 @@ const surveysSlice = createSlice({
         state: createInitialSurveyState("radio-button"),
       });
     },
-    reorderSurveys: (state, action: PayloadAction<{startIndex: number , endIndex: number}>) => {
-      const {startIndex, endIndex} = action.payload
-      const [removed] = state.surveysState.splice(startIndex, 1)
-      state.surveysState.splice(endIndex, 0, removed)
-    }
+    reorderSurveys: (
+      state,
+      action: PayloadAction<{ startIndex: number; endIndex: number }>
+    ) => {
+      const { startIndex, endIndex } = action.payload;
+      const [removed] = state.surveysState.splice(startIndex, 1);
+      state.surveysState.splice(endIndex, 0, removed);
+    },
   },
 });
 
@@ -208,7 +236,7 @@ export const {
   copySurvey,
   deleteSurvey,
   addSurvey,
-  reorderSurveys
+  reorderSurveys,
 } = surveysSlice.actions;
 
 export const SurveysStore = configureStore({
