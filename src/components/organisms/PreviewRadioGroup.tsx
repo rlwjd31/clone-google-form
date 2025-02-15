@@ -1,4 +1,4 @@
-import RadioOption from "@/components/molecules/RadioOption";
+import PreviewRadioOption from "@/components/molecules/PreviewRadioOption";
 import { OptionType } from "@/types/option.type";
 import { cn } from "@/utils/cn";
 import { ComponentProps, useState } from "react";
@@ -8,7 +8,10 @@ type RadioGroupProps = ComponentProps<"div"> & {
   className?: string;
 };
 
-export default function RadioGroup({ className, options }: RadioGroupProps) {
+export default function PreviewRadioGroup({
+  className,
+  options,
+}: RadioGroupProps) {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
     undefined
   );
@@ -16,7 +19,7 @@ export default function RadioGroup({ className, options }: RadioGroupProps) {
   return (
     <div className={cn("flex flex-col gap-1", className)}>
       {options.map(({ optionId, value }, idx) => (
-        <RadioOption
+        <PreviewRadioOption
           key={optionId}
           isActivated={value === selectedValue}
           onClickHandler={() =>
