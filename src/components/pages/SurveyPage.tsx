@@ -90,6 +90,11 @@ export default function SurveyPage() {
             placeholder="설문지 제목"
             value={surveyTitle}
             onChange={(e) => dispatch(setSurveyTitle(e.target.value))}
+            onBlur={(e) => {
+              if (e.target.value === "") {
+                dispatch(setSurveyTitle("제목 없는 설문지"));
+              }
+            }}
           />
           <Input.Description
             className={cn(
