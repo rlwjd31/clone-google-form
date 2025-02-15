@@ -1,7 +1,6 @@
 import { QuestionType } from "@/types/question.type";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-
 type Questions<T extends QuestionType> = T extends
   | "check-box"
   | "radio-button"
@@ -191,6 +190,11 @@ const surveysSlice = createSlice({
         state: createInitialSurveyState("radio-button"),
       });
     },
+    reorderSurveys: (state, action: PayloadAction<{startIndex: number , endIndex: number}>) => {
+      const {startIndex, endIndex} = action.payload
+      const [removed] = state.surveysState.splice(startIndex, 1)
+      state.surveysState.splice(endIndex, 0, removed)
+    }
   },
 });
 
@@ -203,7 +207,8 @@ export const {
   setDescription,
   copySurvey,
   deleteSurvey,
-  addSurvey
+  addSurvey,
+  reorderSurveys
 } = surveysSlice.actions;
 
 export const SurveysStore = configureStore({
