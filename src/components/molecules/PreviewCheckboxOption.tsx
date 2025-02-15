@@ -18,7 +18,7 @@ export default function PreviewCheckboxOption({
   ...others
 }: CheckboxOptionProps) {
   return (
-    <div className="flex items-center w-full gap-2">
+    <div className="flex w-full items-center gap-2">
       <div
         className={cn("flex w-full items-center gap-2 py-1", className)}
         {...others}
@@ -27,6 +27,7 @@ export default function PreviewCheckboxOption({
         <Input.SubTitle
           inputStyle="py-3 hover:bg-card text-sm bg-card px-0"
           value={value}
+          disabled
         />
       </div>
     </div>

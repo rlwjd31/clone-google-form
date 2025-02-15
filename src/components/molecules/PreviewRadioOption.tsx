@@ -28,6 +28,7 @@ export default function PreviewRadioOption({
         <Input.SubTitle
           inputStyle="py-3 hover:bg-card text-sm bg-card px-0"
           value={value}
+          disabled
         />
       </div>
     </div>
