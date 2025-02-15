@@ -1,4 +1,4 @@
-import CheckboxOption from "@/components/molecules/CheckboxOption";
+import PreviewCheckboxOption from "@/components/molecules/PreviewCheckboxOption";
 import { OptionType } from "@/types/option.type";
 import { cn } from "@/utils/cn";
 import { ComponentProps, useState } from "react";
@@ -25,7 +25,7 @@ export default function PreviewCheckboxGroup({
   return (
     <div className={cn("flex flex-col gap-1", className)}>
       {options.map(({ optionId, value }, idx) => (
-        <CheckboxOption
+        <PreviewCheckboxOption
           key={optionId}
           isActivated={selectedValue.includes(value)}
           onClickHandler={() => toggleSelectedValue(value)}
