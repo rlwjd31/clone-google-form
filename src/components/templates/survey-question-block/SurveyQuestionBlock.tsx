@@ -15,10 +15,7 @@ import {
 import { QuestionType } from "@/types/question.type";
 import { cn } from "@/utils/cn";
 import { useRef, useState } from "react";
-import {
-  useDispatch,
-  useSelector,
-} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SurveyQuestionBlock() {
   const surveyId = useSurveyIdContext();
@@ -58,8 +55,9 @@ export default function SurveyQuestionBlock() {
       ref={cardRef}
       onClick={() => setIsCardFocused(true)}
       className={isCardFocused ? "" : "pb-8"}
+      draggable
     >
-      <div className="flex items-start gap-8 mb-6">
+      <div className="mb-6 flex items-start gap-8">
         <div className="relative w-full">
           <Input.SubTitle
             className={cn(
@@ -81,7 +79,7 @@ export default function SurveyQuestionBlock() {
             }}
           />
           {!isCardFocused && isRequired && (
-            <span className="absolute top-0 left-0 text-lg text-red-600 translate-x-1 translate-y-4">
+            <span className="absolute left-0 top-0 translate-x-1 translate-y-4 text-lg text-red-600">
               *
             </span>
           )}
@@ -98,7 +96,7 @@ export default function SurveyQuestionBlock() {
       {isCardFocused && isOptionAddButtonShouldeBeRender && (
         <button
           onClick={addOption}
-          className="self-start px-4 py-2 mt-4 border rounded-md shadow-sm cursor-pointer items-cener border-neutral-300"
+          className="items-cener mt-4 cursor-pointer self-start rounded-md border border-neutral-300 px-4 py-2 shadow-sm"
         >
           옵션 추가
         </button>

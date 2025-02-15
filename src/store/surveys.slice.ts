@@ -2,7 +2,7 @@ import { OptionType } from "@/types/option.type";
 import { QuestionType } from "@/types/question.type";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Question = OptionType
+type Question = OptionType;
 
 type Questions<T extends QuestionType> = T extends
   | "check-box"
@@ -40,18 +40,14 @@ const createInitialSurveyState = <T extends QuestionType>(
   type: T
 ): SurveyState<T> => {
   return {
-    lastOptionNumber: 3,
+    lastOptionNumber: 1,
     questionTitle: "",
     questions: ([
       "check-box",
       "radio-button",
       "arrow-drop-down-circle",
     ].includes(type)
-      ? [
-          { optionId: 1, value: "옵션 1" },
-          { optionId: 2, value: "옵션 2" },
-          { optionId: 3, value: "옵션 3" },
-        ]
+      ? [{ optionId: 1, value: "옵션 1" }]
       : undefined) as Questions<T>,
     questionType: type,
     isRequired: false,
@@ -60,19 +56,21 @@ const createInitialSurveyState = <T extends QuestionType>(
 
 type SurveysState = {
   lastSurveyId: number;
-  bigQuestionTitle: string;
+  surveyTitle: string;
   description: string;
   surveysState: Array<{ surveyId: number; state: SurveyState<QuestionType> }>;
 };
 
 const initialSurveysState: SurveysState = {
   lastSurveyId: 1,
-  bigQuestionTitle: "제목 없는 설문지",
+  surveyTitle: "제목 없는 설문지",
   description: "설문지 설명",
   surveysState: [
     {
       surveyId: 1,
-      state: createInitialSurveyState("check-box") as SurveyState<QuestionType>,
+      state: createInitialSurveyState(
+        "radio-button"
+      ) as SurveyState<QuestionType>,
     },
   ],
 };
@@ -85,7 +83,6 @@ const surveysSlice = createSlice({
       state,
       action: PayloadAction<{ surveyId: number; value: string }>
     ) => {
-      console.log(action.payload);
       const { surveyId, value } = action.payload;
       const survey = state.surveysState.find(
         (state) => state.surveyId === surveyId
@@ -159,8 +156,42 @@ const surveysSlice = createSlice({
         survey.state.isRequired = isRequired;
       }
     },
-    setBigQuestionTitle: (state, action: PayloadAction<string>) => {
-      state.bigQuestionTitle = action.payload;
+    setSurveyTitle: (state, action: PayloadAction<string>) => {
+      state.surveyTitle = action.payload;
+    },
+    setDescription: (state, action: PayloadAction<string>) => {
+      state.description = action.payload;
+    },
+    copySurvey: (state, action: PayloadAction<{ surveyId: number }>) => {
+      const nextLastSurveyId = state.lastSurveyId + 1;
+      state.lastSurveyId = nextLastSurveyId;
+
+      const targetIndex = state.surveysState.findIndex(
+        (survey) => survey.surveyId === action.payload.surveyId
+      );
+
+      if (targetIndex !== -1) {
+        state.surveysState.splice(targetIndex + 1, 0, {
+          surveyId: nextLastSurveyId,
+          state: {
+            ...state.surveysState[targetIndex].state, // 깊은 복사로 동일한 상태 복사
+          },
+        });
+      }
+    },
+    deleteSurvey: (state, action: PayloadAction<{ surveyId: number }>) => {
+      state.surveysState = state.surveysState.filter(
+        (survey) => survey.surveyId !== action.payload.surveyId
+      );
+    },
+    addSurvey: (state) => {
+      const nextLastSurveyId = state.lastSurveyId + 1;
+      state.lastSurveyId = nextLastSurveyId;
+
+      state.surveysState.push({
+        surveyId: nextLastSurveyId,
+        state: createInitialSurveyState("radio-button"),
+      });
     },
   },
 });
@@ -170,6 +201,11 @@ export const {
   setQuestions,
   setQuestionType,
   setIsRequired,
+  setSurveyTitle,
+  setDescription,
+  copySurvey,
+  deleteSurvey,
+  addSurvey
 } = surveysSlice.actions;
 
 export const SurveysStore = configureStore({

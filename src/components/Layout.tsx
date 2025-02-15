@@ -2,8 +2,10 @@ import { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex h-dvh w-dvw items-center justify-center bg-purple-secondary p-12">
-      {children}
+    <div className="flex h-screen w-screen flex-col bg-purple-secondary px-16 py-12">
+      <div className="mx-auto w-full max-w-[51rem]">{children}</div>
     </div>
   );
 }
+
+//
