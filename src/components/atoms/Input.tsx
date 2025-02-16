@@ -8,9 +8,9 @@ type InputProps = ComponentProps<"input"> & {
 
 const defaultInputStyle = "size-full focus:outline-none";
 const underlineNeuralStyle =
-  "absolute bottom-0 w-full h-[1px] bg-neutral-300 opacity-0";
+  "input-underline-neutral absolute bottom-0 w-full h-[1px] bg-neutral-300 opacity-0";
 const underlinePurpleStyle =
-  "absolute w-full scale-0 bottom-0 translate-[-50%] h-[2px] transition-all duration-200 bg-purple-primary group-focus-within:scale-100";
+  "input-underline-purple absolute w-full scale-0 bottom-0 translate-[-50%] h-[2px] transition-all duration-200 bg-purple-primary group-focus-within:scale-100";
 
 const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
   if (event.key === "Enter") {

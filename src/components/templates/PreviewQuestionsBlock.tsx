@@ -31,7 +31,7 @@ export default function PreviewQuestionsBlock() {
         <div className="relative w-full">
           <Input.SubTitle disabled value={questionTitle} inputStyle="px-2" />
           {isRequired && (
-            <span className="absolute left-0 top-0 translate-x-1 translate-y-4 text-lg text-red-600">
+            <span className="absolute left-0 top-0 -translate-x-1 translate-y-4 text-lg text-red-600">
               *
             </span>
           )}
@@ -39,7 +39,7 @@ export default function PreviewQuestionsBlock() {
       </div>
       <PreviewQuestionsByType />
       {isValidationFailed && (
-        <div className="mt-6 flex gap-4 pl-2">
+        <div className="mt-6 flex gap-3">
           <Icon type="error" />
           <p className="text-red-primary">필수 질문입니다.</p>
         </div>
@@ -55,12 +55,22 @@ function PreviewQuestionsByType() {
   }));
   const { setValue, trigger } = useFormContext();
   const formNameContext = useCustomFormContext();
+  const {
+    formState: { errors },
+  } = useFormContext();
+
+  const isValidationFailed = errors[formNameContext?.formName ?? ""];
+  const textErrorStyle = cn(
+    "ml-2",
+    isValidationFailed &&
+      "[&_.input-underline-neutral]:bg-red-primary [&_.input-underline-purple]:bg-red-primary"
+  );
 
   switch (questionType) {
     case "short-text":
       return (
         <Input.Description
-          inputStyle="ml-[10px]"
+          className={textErrorStyle}
           placeholder="단답형"
           onChange={(e) => {
             setValue(formNameContext?.formName ?? "", e.target.value);
@@ -71,7 +81,7 @@ function PreviewQuestionsByType() {
     case "long-text":
       return (
         <Input.Description
-          inputStyle="ml-[10px]"
+          className="ml-2"
           placeholder="장문형"
           onChange={(e) => {
             setValue(formNameContext?.formName ?? "", e.target.value);

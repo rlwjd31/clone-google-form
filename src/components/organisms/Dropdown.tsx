@@ -48,8 +48,8 @@ export default function Dropdown({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedDropdownValue,
-    formContext.setValue,
-    formContext.trigger,
+    formContext?.setValue,
+    formContext?.trigger,
     formNameContext?.formName,
   ]);
 
