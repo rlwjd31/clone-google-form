@@ -87,7 +87,7 @@ export default function PreviewPage() {
                       </div>
                       <input
                         placeholder="validation hidden input"
-                        {...register(formName, {
+                        {...register(formName as `${number}`, {
                           required: isRequired,
                         })}
                       />

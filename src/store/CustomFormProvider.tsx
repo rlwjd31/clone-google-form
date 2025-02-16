@@ -18,7 +18,7 @@ export const CustomFormProvider = ({
   );
 };
 
-export const useCustomFormProvider = () => {
+export const useCustomFormContext = () => {
   const context = useContext(CustomFormContext);
   if (!context)
     throw new Error(
