@@ -2,6 +2,8 @@ import { OptionType } from "@/types/option.type";
 import { QuestionType } from "@/types/question.type";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+const STORAGE_KEY = "surveysState";
+
 type Questions<T extends QuestionType> = T extends
   | "check-box"
   | "radio-button"
@@ -34,6 +36,14 @@ type SetQuestionsPayloadType =
       value: string;
     };
 
+const initialStateFromStorage = (): SurveysState => {
+  const serializedState = localStorage.getItem(STORAGE_KEY);
+
+  return serializedState
+    ? JSON.parse(serializedState)
+    : createInitialSurveysState("short-text");
+};
+
 const createInitialSurveyState = <T extends QuestionType>(
   type: T
 ): SurveyState<T> => {
@@ -56,14 +66,9 @@ const createInitialSurveyState = <T extends QuestionType>(
   };
 };
 
-export type SurveysState = {
-  lastSurveyId: number;
-  surveyTitle: string;
-  description: string;
-  surveysState: Array<{ surveyId: number; state: SurveyState<QuestionType> }>;
-};
-
-const initialSurveysState: SurveysState = {
+const createInitialSurveysState = (
+  questionType: QuestionType
+): SurveysState => ({
   lastSurveyId: 1,
   surveyTitle: "제목 없는 설문지",
   description: "설문지 설명",
@@ -71,7 +76,7 @@ const initialSurveysState: SurveysState = {
     {
       surveyId: 1,
       state: createInitialSurveyState(
-        "radio-button"
+        questionType
       ) as SurveyState<QuestionType>,
     },
     {
@@ -95,7 +100,16 @@ const initialSurveysState: SurveysState = {
       state: createInitialSurveyState("long-text") as SurveyState<QuestionType>,
     },
   ],
+});
+
+export type SurveysState = {
+  lastSurveyId: number;
+  surveyTitle: string;
+  description: string;
+  surveysState: Array<{ surveyId: number; state: SurveyState<QuestionType> }>;
 };
+
+const initialSurveysState = initialStateFromStorage();
 
 const surveysSlice = createSlice({
   name: "surverysSlice",
@@ -244,3 +258,12 @@ export const SurveysStore = configureStore({
 });
 export type GlobalState = ReturnType<typeof SurveysStore.getState>;
 export type GlobalActionType = typeof SurveysStore.dispatch;
+
+SurveysStore.subscribe(() => {
+  try {
+    const surveysState = SurveysStore.getState();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(surveysState));
+  } catch (e) {
+    console.warn("localStorage에 저장할 수 없습니다.", e);
+  }
+});
