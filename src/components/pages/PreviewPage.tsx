@@ -88,7 +88,17 @@ export default function PreviewPage() {
                       <input
                         placeholder="validation hidden input"
                         {...register(formName as `${number}`, {
-                          required: isRequired,
+                          // 다중 선택인 check-box가 아닐 땐 단일 string 값이므로 required만 적용
+                          ...(questionType !== "check-box" && {
+                            required: isRequired,
+                          }),
+                          // 다중 선택인 check-box일 때
+                          ...(isRequired &&
+                            questionType === "check-box" && {
+                              validate: {
+                                noEmptyArray: (value) => Array.isArray(value) && value.length > 0,
+                              },
+                            }),
                         })}
                       />
                     </>
