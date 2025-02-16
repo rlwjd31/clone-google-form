@@ -8,9 +8,10 @@ import Card from "@/components/molecules/Card";
 import PreviewQuestionsBlock from "@/components/templates/PreviewQuestionsBlock";
 import { SurveyIdProvider } from "@/store/SurveyIdProvider";
 import { GlobalState } from "@/store/surveys.slice";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { CustomFormProvider } from "@/store/CustomFormProvider";
 import { createFormName } from "@/utils/createFormName";
+import { useNavigate } from "react-router-dom";
 
 export default function PreviewPage() {
   const surveys = useSelector((state: GlobalState) => state.surveysState);
@@ -19,6 +20,7 @@ export default function PreviewPage() {
     surveyTitle: state.surveyTitle,
     description: state.description,
   }));
+  const navigate = useNavigate();
   const formMethods = useForm({
     mode: "all",
     defaultValues: {
@@ -38,15 +40,33 @@ export default function PreviewPage() {
 
   const isRequiredExisted = surveys.some((survey) => survey.state.isRequired);
 
+  const onSubmitHandler: SubmitHandler<{
+    [key: string]: unknown;
+  }> = (formData) => {
+    const answers = Object.values(formData)
+      .slice(surveys.length)
+      .map((answer, index) => {
+        return {
+          questionTitle: surveys[index].state.questionTitle,
+          answer,
+        };
+      });
+
+    const parsedFormData = {
+      surveyTitle,
+      description,
+      answers,
+    };
+
+    navigate("/result", { state: { parsedFormData } });
+
+    return parsedFormData;
+  };
+
   return (
     <FormProvider {...formMethods}>
       <Layout>
-        <form
-          className=""
-          onSubmit={handleSubmit((formData) =>
-            console.log("submit event formData =>", formData)
-          )}
-        >
+        <form className="" onSubmit={handleSubmit(onSubmitHandler)}>
           {/* 설문지 제목 영역 */}
           <section className="relative flex w-full flex-col items-center gap-4 pb-10 [&_.hidden-preview-mode]:pointer-events-none">
             <Card className="relative w-full pb-6" draggable={false}>

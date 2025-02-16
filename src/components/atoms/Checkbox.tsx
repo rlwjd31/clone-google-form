@@ -33,11 +33,14 @@ export default function Checkbox({
         >
           <div
             className={cn(
-              "absolute left-1/2 top-1/2 size-8 transition-all duration-200 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-primary",
-              !disabled ? (isActivated ? "scale-100" : "scale-0") : ""
+              "absolute left-1/2 top-1/2 size-8 transition-all duration-300 -translate-x-1/2 -translate-y-1/2 rounded-full",
+              !disabled
+                ? isActivated
+                  ? "scale-100 bg-purple-primary"
+                  : "scale-0"
+                : ""
             )}
           />
-
         </div>
         {!disabled && (
           <>
