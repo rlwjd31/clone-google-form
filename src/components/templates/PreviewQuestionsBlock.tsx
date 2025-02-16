@@ -2,11 +2,11 @@ import Input from "@/components/atoms/Input";
 import Card from "@/components/molecules/Card";
 import { useSurveyIdContext } from "@/store/SurveyIdProvider";
 import { GlobalState } from "@/store/surveys.slice";
-import { cn } from "@/utils/cn";
 import { useSelector } from "react-redux";
 import PreviewCheckboxGroup from "@/components/organisms/PreviewCheckboxGroup";
 import PreviewRadioGroup from "@/components/organisms/PreviewRadioGroup";
 import Dropdown from "@/components/organisms/Dropdown";
+import Icon from "@/components/atoms/Icon";
 
 export default function PreviewQuestionsBlock() {
   const surveyId = useSurveyIdContext();
@@ -27,6 +27,10 @@ export default function PreviewQuestionsBlock() {
         </div>
       </div>
       <PreviewQuestionsByType />
+      <div className="mt-6 flex gap-4 pl-2">
+        <Icon type="error" />
+        <p className="text-red-primary">필수 질문입니다.</p>
+      </div>
     </Card>
   );
 }
