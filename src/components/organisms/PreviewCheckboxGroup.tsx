@@ -1,7 +1,9 @@
 import PreviewCheckboxOption from "@/components/molecules/PreviewCheckboxOption";
+import { useCustomFormContext } from "@/store/CustomFormProvider";
 import { OptionType } from "@/types/option.type";
 import { cn } from "@/utils/cn";
-import { ComponentProps, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
 type RadioGroupProps = ComponentProps<"div"> & {
   options: Array<OptionType>;
@@ -13,6 +15,15 @@ export default function PreviewCheckboxGroup({
   options,
 }: RadioGroupProps) {
   const [selectedValue, setSelectedValue] = useState<string[]>([]);
+  const { setValue, trigger } = useFormContext();
+  const formNameContext = useCustomFormContext();
+
+  useEffect(() => {
+    if (formNameContext?.formName) {
+      setValue(formNameContext.formName, selectedValue);
+      trigger(formNameContext.formName);
+    }
+  }, [selectedValue, setValue, formNameContext?.formName, trigger]);
 
   const toggleSelectedValue = (option: string) => {
     setSelectedValue((prev) =>

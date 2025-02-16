@@ -9,61 +9,12 @@ export default {
         "purple-secondary": "#F0EBF8",
         card: "#FFFFFF",
         "blue-primary": "#4285f4",
+        "red-primary": "#C23729",
       },
       backgroundImage: {
         "dot-pattern": "radial-gradient(circle, black 1px, transparent 1px)",
-      },
-      keyframes: {
-        scaleUp: {
-          "0%": { transform: "scale(0)" },
-          "100%": { transform: "scale(1)" },
-        },
-        scaleDown: {
-          "0%": { transform: "scale(1)" },
-          "100%": { transform: "scale(0)" },
-        },
-        fillFromBorder: {
-          "0%": {
-            background: "transparent",
-            boxShadow: "inset 0 0 0 0 #673AB7",
-          },
-          "100%": {
-            background: "#673AB7",
-            boxShadow: "inset 0 0 0 100px #673AB7",
-          },
-        },
-        emptyFromCenter: {
-          "0%": {
-            background: "#673AB7",
-            boxShadow: "inset 0 0 0px 100px #673AB7",
-          },
-          "100%": {
-            background: "transparent",
-            boxShadow: "inset 0 0 0 0 rgb(0, 0, 0, 0)",
-          },
-        },
-      },
-      animation: {
-        scaleUp: "scaleUp 0.2s ease-out none",
-        scaleDown: "scaleDown 0.2s ease-out forwards",
-        fillFromBorder: "fillFromBorder 0.5s ease-in forwards",
-        emptyFromCenter: "emptyFromCenter 0.2s ease-in forwards",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
 };
-
-// "primary": "#3C64B1",
-// "secondary": "#F2F2F2",
-// "tertiary": "#F8F8F8",
-// "quaternary": "#E5E5E5",
-// "quinary": "#D8D8D8",
-// "senary": "#BFBFBF",
-// "septenary": "#A6A6A6",
-// "octonary": "#8C8C8C",
-// "nonary": "#737373",
-// "denary": "#595959",
-// "elevenary": "#404040",
-// "twelvary": "#262626",
-// "thirteenary": "#0D0D0D",

@@ -1,10 +1,12 @@
-import { useRef, useState, ComponentProps } from "react";
+import { useRef, useState, ComponentProps, useEffect } from "react";
 
 import Icon, { IconInfo, IconType } from "@/components/atoms/Icon";
 import { cn } from "@/utils/cn";
 import useClickOutside from "@/hooks/useClickOustside";
 import { QuestionType } from "@/types/question.type";
 import { OptionType } from "@/types/option.type";
+import { useFormContext } from "react-hook-form";
+import { useCustomFormContext } from "@/store/CustomFormProvider";
 
 const dropdownItemsContent: QuestionType[] = [
   "short-text",
@@ -30,10 +32,26 @@ export default function Dropdown({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDropdownValue, setSelectedDropdownValue] = useState<
-    QuestionType | OptionType
-  >(questionType ?? "short-text");
+    QuestionType | OptionType | string
+  >(contents ? "" : questionType ?? "short-text");
   const DROPDOWN_ITEM_HEIGHT = 48;
   useClickOutside(dropdownRef, () => setIsOpen(false));
+
+  const formContext = useFormContext();
+  const formNameContext = useCustomFormContext();
+
+  useEffect(() => {
+    if (formNameContext?.formName) {
+      formContext.setValue(formNameContext.formName, selectedDropdownValue);
+      formContext.trigger(formNameContext.formName);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedDropdownValue,
+    formContext?.setValue,
+    formContext?.trigger,
+    formNameContext?.formName,
+  ]);
 
   if (!contents)
     return (
@@ -97,7 +115,7 @@ export default function Dropdown({
         <DropdownItem
           className="rounded-md border border-neutral-300 bg-card hover:bg-card [&_p]:text-neutral-600"
           onClick={() => setIsOpen((prev) => !prev)}
-          text={(selectedDropdownValue as OptionType).value || "선택"}
+          text={(selectedDropdownValue as string) || "선택"}
         />
         <div
           className={cn(
@@ -131,7 +149,7 @@ export default function Dropdown({
                   <DropdownItem
                     isActivated={selectedDropdownValue === content}
                     onClick={() => {
-                      setSelectedDropdownValue(content);
+                      setSelectedDropdownValue(content.value);
                       if (setValue) {
                         setValue({ ...content });
                       }

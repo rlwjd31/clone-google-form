@@ -15,6 +15,7 @@ export default function Radio({
 }: RadioProps) {
   return (
     <button
+      type="button"
       className={cn(
         "grid size-10 shrink-0 grid-cols-1 rounded-full group grid-rows-1 gap-2 place-items-center",
         !disabled && "hover:bg-purple-secondary",
@@ -28,14 +29,14 @@ export default function Radio({
         <>
           <span
             className={cn(
-              "col-start-1 row-start-1 rounded-full size-10 group-hover:bg-purple-secondary",
-              isActivated ? "animate-scaleUp" : "animate-scaleDown"
+              "col-start-1 row-start-1 transition-all duration-250 rounded-full size-10 group-hover:bg-purple-secondary scale-0",
+              isActivated && "scale-100"
             )}
           />
-          <span
+          <div
             className={cn(
-              "z-20 col-start-1 row-start-1 size-[10px] rounded-full bg-purple-primary",
-              isActivated ? "animate-scaleUp" : "animate-scaleDown"
+              "z-30 col-start-1 transition-all duration-250 row-start-1 size-[11px] rounded-full bg-purple-primary scale-0",
+              isActivated && "scale-100"
             )}
           />
         </>
