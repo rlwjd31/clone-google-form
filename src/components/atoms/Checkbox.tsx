@@ -22,6 +22,7 @@ export default function Checkbox({
           !disabled && "hover:bg-purple-secondary",
           className
         )}
+        type="button"
         onClick={disabled ? () => {} : onClick}
         {...others}
       >

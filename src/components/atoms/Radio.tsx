@@ -15,6 +15,7 @@ export default function Radio({
 }: RadioProps) {
   return (
     <button
+      type="button"
       className={cn(
         "grid size-10 shrink-0 grid-cols-1 rounded-full group grid-rows-1 gap-2 place-items-center",
         !disabled && "hover:bg-purple-secondary",
