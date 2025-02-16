@@ -33,7 +33,7 @@ export default function Dropdown({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDropdownValue, setSelectedDropdownValue] = useState<
     QuestionType | OptionType | string
-  >(questionType ?? "short-text");
+  >(contents ? "" : questionType ?? "short-text");
   const DROPDOWN_ITEM_HEIGHT = 48;
   useClickOutside(dropdownRef, () => setIsOpen(false));
 
@@ -43,6 +43,7 @@ export default function Dropdown({
   useEffect(() => {
     if (formContext && customFormName) {
       formContext.setValue(customFormName.formName, selectedDropdownValue);
+      formContext.trigger(customFormName.formName);
     }
   }, [selectedDropdownValue, formContext, customFormName]);
 
@@ -108,7 +109,7 @@ export default function Dropdown({
         <DropdownItem
           className="rounded-md border border-neutral-300 bg-card hover:bg-card [&_p]:text-neutral-600"
           onClick={() => setIsOpen((prev) => !prev)}
-          text={(selectedDropdownValue as OptionType).value || "선택"}
+          text={(selectedDropdownValue as string) || "선택"}
         />
         <div
           className={cn(

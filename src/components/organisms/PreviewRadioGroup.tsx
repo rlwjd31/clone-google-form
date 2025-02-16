@@ -1,7 +1,5 @@
 import PreviewRadioOption from "@/components/molecules/PreviewRadioOption";
-import {
-  useCustomFormContext,
-} from "@/store/CustomFormProvider";
+import { useCustomFormContext } from "@/store/CustomFormProvider";
 import { OptionType } from "@/types/option.type";
 import { cn } from "@/utils/cn";
 import { ComponentProps, useEffect, useState } from "react";
@@ -19,12 +17,15 @@ export default function PreviewRadioGroup({
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
     undefined
   );
-  const { setValue } = useFormContext();
-  const { formName } = useCustomFormContext();
+  const { setValue, trigger } = useFormContext();
+  const formNameContext = useCustomFormContext();
 
   useEffect(() => {
-    setValue(formName, selectedValue);
-  }, [selectedValue, setValue, formName]);
+    if (formNameContext?.formName) {
+      setValue(formNameContext.formName, selectedValue);
+      trigger(formNameContext.formName);
+    }
+  }, [selectedValue, setValue, formNameContext?.formName, trigger]);
 
   return (
     <div className={cn("flex flex-col gap-1", className)}>

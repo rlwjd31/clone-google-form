@@ -15,12 +15,15 @@ export default function PreviewCheckboxGroup({
   options,
 }: RadioGroupProps) {
   const [selectedValue, setSelectedValue] = useState<string[]>([]);
-  const { setValue } = useFormContext();
-  const { formName } = useCustomFormContext();
+  const { setValue, trigger } = useFormContext();
+  const formNameContext = useCustomFormContext();
 
   useEffect(() => {
-    setValue(formName, selectedValue);
-  }, [selectedValue, setValue, formName]);
+    if (formNameContext?.formName) {
+      setValue(formNameContext.formName, selectedValue);
+      trigger(formNameContext.formName);
+    }
+  }, [selectedValue, setValue, formNameContext?.formName, trigger]);
 
   const toggleSelectedValue = (option: string) => {
     setSelectedValue((prev) =>

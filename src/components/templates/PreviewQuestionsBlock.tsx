@@ -42,7 +42,7 @@ function PreviewQuestionsByType() {
   const { questionType, questions } = useSelector((state: GlobalState) => ({
     ...state.surveysState.find((survey) => survey.surveyId === surveyId)?.state,
   }));
-  const { setValue } = useFormContext();
+  const { setValue, trigger } = useFormContext();
   const customFormNameContext = useCustomFormContext();
 
   switch (questionType) {
@@ -51,9 +51,10 @@ function PreviewQuestionsByType() {
         <Input.Description
           inputStyle="ml-[10px]"
           placeholder="단답형"
-          onChange={(e) =>
-            setValue(customFormNameContext?.formName ?? "", e.target.value)
-          }
+          onChange={(e) => {
+            setValue(customFormNameContext?.formName ?? "", e.target.value);
+            trigger(customFormNameContext?.formName ?? "");
+          }}
         />
       );
     case "long-text":
@@ -61,9 +62,10 @@ function PreviewQuestionsByType() {
         <Input.Description
           inputStyle="ml-[10px]"
           placeholder="장문형"
-          onChange={(e) =>
-            setValue(customFormNameContext?.formName ?? "", e.target.value)
-          }
+          onChange={(e) => {
+            setValue(customFormNameContext?.formName ?? "", e.target.value);
+            trigger(customFormNameContext?.formName ?? "");
+          }}
         />
       );
     case "check-box":
