@@ -88,6 +88,7 @@ export default function PreviewPage() {
                       <input
                         placeholder="validation hidden input"
                         {...register(formName as `${number}`, {
+                          // @FIXME: mode="all"인데도 자동으로 검증이 되지 않는 이슈
                           // 다중 선택인 check-box가 아닐 땐 단일 string 값이므로 required만 적용
                           ...(questionType !== "check-box" && {
                             required: isRequired,
