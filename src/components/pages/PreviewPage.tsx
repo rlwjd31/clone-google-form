@@ -1,12 +1,14 @@
+import { DevTool } from "@hookform/devtools";
+import { useRef } from "react";
+import { useSelector } from "react-redux";
+
 import Input from "@/components/atoms/Input";
 import Layout from "@/components/Layout";
 import Card from "@/components/molecules/Card";
 import PreviewQuestionsBlock from "@/components/templates/PreviewQuestionsBlock";
 import { SurveyIdProvider } from "@/store/SurveyIdProvider";
 import { GlobalState } from "@/store/surveys.slice";
-
-import { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
 export default function PreviewPage() {
   const surveys = useSelector((state: GlobalState) => state.surveysState);
@@ -16,6 +18,9 @@ export default function PreviewPage() {
     description: state.description,
   }));
   const { register, control, handleSubmit } = useForm({ mode: "all" });
+  const isRequiredExisted = useSelector((state: GlobalState) =>
+    state.surveysState.some((survey) => survey.state.isRequired)
+  );
 
   return (
     <Layout>
@@ -34,6 +39,11 @@ export default function PreviewPage() {
               value={description}
             />
           </div>
+          {isRequiredExisted && (
+            <div className="mt-6 border-t border-neutral-300 pt-4 text-red-primary">
+              * 표시는 필수 질문임
+            </div>
+          )}
         </Card>
 
         {/* Survey rendering영역 */}
