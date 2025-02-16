@@ -38,14 +38,20 @@ export default function Dropdown({
   useClickOutside(dropdownRef, () => setIsOpen(false));
 
   const formContext = useFormContext();
-  const customFormName = useCustomFormContext();
+  const formNameContext = useCustomFormContext();
 
   useEffect(() => {
-    if (formContext && customFormName) {
-      formContext.setValue(customFormName.formName, selectedDropdownValue);
-      formContext.trigger(customFormName.formName);
+    if (formNameContext?.formName) {
+      formContext.setValue(formNameContext.formName, selectedDropdownValue);
+      formContext.trigger(formNameContext.formName);
     }
-  }, [selectedDropdownValue, formContext, customFormName]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedDropdownValue,
+    formContext.setValue,
+    formContext.trigger,
+    formNameContext?.formName,
+  ]);
 
   if (!contents)
     return (

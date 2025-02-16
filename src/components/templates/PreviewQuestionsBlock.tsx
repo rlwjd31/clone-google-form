@@ -16,7 +16,6 @@ export default function PreviewQuestionsBlock() {
     ...state.surveysState.find((survey) => survey.surveyId === surveyId)?.state,
   }));
 
-  // @FIXME: 무한 렌더링 발생
   const {
     formState: { errors },
   } = useFormContext();
