@@ -15,6 +15,7 @@ export default function PreviewPage() {
     surveyTitle: state.surveyTitle,
     description: state.description,
   }));
+  const { register, control, handleSubmit } = useForm({ mode: "all" });
 
   return (
     <Layout>
@@ -36,7 +37,7 @@ export default function PreviewPage() {
         </Card>
 
         {/* Survey rendering영역 */}
-        <div className="relative flex w-full flex-col gap-4">
+        <>
           {surveys.map(({ surveyId }, index) => (
             <div
               key={surveyId}
@@ -50,6 +51,8 @@ export default function PreviewPage() {
             </div>
           ))}
         </div>
+          <DevTool control={control} />
+        </>
       </div>
     </Layout>
   );
