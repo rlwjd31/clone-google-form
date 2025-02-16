@@ -29,7 +29,12 @@ export default function PreviewPage() {
     },
   });
 
-  const { register, control, handleSubmit } = formMethods;
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = formMethods;
 
   const isRequiredExisted = surveys.some((survey) => survey.state.isRequired);
 
@@ -96,7 +101,8 @@ export default function PreviewPage() {
                           ...(isRequired &&
                             questionType === "check-box" && {
                               validate: {
-                                noEmptyArray: (value) => Array.isArray(value) && value.length > 0,
+                                noEmptyArray: (value) =>
+                                  Array.isArray(value) && value.length > 0,
                               },
                             }),
                         })}
@@ -109,11 +115,10 @@ export default function PreviewPage() {
           </section>
           {/* 설문지 하단 제출, 양식지우기 section */}
           <section className="mb-12 flex items-center justify-between">
-            {/*  TODO: form validation 중일 시는 disabled로 제출을 막는 기능 구현 */}
             <button
               type="submit"
               className="rounded-md bg-purple-primary px-8 py-3 text-white disabled:bg-neutral-400"
-              disabled={"" ? true : false}
+              disabled={!isValid ? true : false}
             >
               제출
             </button>
