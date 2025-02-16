@@ -21,6 +21,12 @@ export default function PreviewPage() {
   }));
   const formMethods = useForm({
     mode: "all",
+    defaultValues: {
+      ...surveys.map(({ surveyId, state: { questionType } }) => ({
+        [createFormName({ surveyId, questionType })]:
+          questionType === "check-box" ? [] : "",
+      })),
+    },
   });
 
   const { register, control, handleSubmit } = formMethods;
