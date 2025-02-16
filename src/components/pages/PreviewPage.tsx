@@ -86,11 +86,12 @@ export default function PreviewPage() {
                       >
                         <SurveyIdProvider surveyIdProp={surveyId}>
                           <CustomFormProvider formName={formName}>
-                            <PreviewQuestionsBlock />
+                            <PreviewQuestionsBlock key={surveyId} />
                           </CustomFormProvider>
                         </SurveyIdProvider>
                       </div>
                       <input
+                        type="hidden"
                         placeholder="validation hidden input"
                         {...register(formName as `${number}`, {
                           // 다중 선택인 check-box가 아닐 땐 단일 string 값이므로 required만 적용

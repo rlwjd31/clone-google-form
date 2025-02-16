@@ -170,7 +170,7 @@ function AddSurveyButtonIcon({
     <div
       className="absolute right-0 top-0 z-50 transition-all duration-300 ease-in"
       style={{
-        transform: `translate(150%, ${positionY - 48}px)`, // * 버튼 높이 48px
+        transform: `translate(150%, ${positionY - 72}px)`, // * 버튼 높이 48px + header 높이 24
       }}
     >
       <ButtonIcon

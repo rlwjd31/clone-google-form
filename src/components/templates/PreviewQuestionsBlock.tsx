@@ -9,19 +9,24 @@ import Dropdown from "@/components/organisms/Dropdown";
 import Icon from "@/components/atoms/Icon";
 import { useFormContext } from "react-hook-form";
 import { useCustomFormContext } from "@/store/CustomFormProvider";
+import { cn } from "@/utils/cn";
 
 export default function PreviewQuestionsBlock() {
   const surveyId = useSurveyIdContext();
   const { questionTitle, isRequired } = useSelector((state: GlobalState) => ({
     ...state.surveysState.find((survey) => survey.surveyId === surveyId)?.state,
   }));
-
   const {
     formState: { errors },
   } = useFormContext();
+  const formNameContext = useCustomFormContext();
+
+  const isValidationFailed = errors[formNameContext?.formName ?? ""];
 
   return (
-    <Card className="pb-8">
+    <Card
+      className={cn("pb-8", isValidationFailed && "ring-1 ring-red-primary")}
+    >
       <div className="flex items-start gap-2 pt-4">
         <div className="relative w-full">
           <Input.SubTitle disabled value={questionTitle} inputStyle="px-2" />
@@ -33,10 +38,12 @@ export default function PreviewQuestionsBlock() {
         </div>
       </div>
       <PreviewQuestionsByType />
-      <div className="mt-6 flex gap-4 pl-2">
-        <Icon type="error" />
-        <p className="text-red-primary">필수 질문입니다.</p>
-      </div>
+      {isValidationFailed && (
+        <div className="mt-6 flex gap-4 pl-2">
+          <Icon type="error" />
+          <p className="text-red-primary">필수 질문입니다.</p>
+        </div>
+      )}
     </Card>
   );
 }
@@ -47,7 +54,7 @@ function PreviewQuestionsByType() {
     ...state.surveysState.find((survey) => survey.surveyId === surveyId)?.state,
   }));
   const { setValue, trigger } = useFormContext();
-  const customFormNameContext = useCustomFormContext();
+  const formNameContext = useCustomFormContext();
 
   switch (questionType) {
     case "short-text":
@@ -56,8 +63,8 @@ function PreviewQuestionsByType() {
           inputStyle="ml-[10px]"
           placeholder="단답형"
           onChange={(e) => {
-            setValue(customFormNameContext?.formName ?? "", e.target.value);
-            trigger(customFormNameContext?.formName ?? "");
+            setValue(formNameContext?.formName ?? "", e.target.value);
+            trigger(formNameContext?.formName ?? "");
           }}
         />
       );
@@ -67,8 +74,8 @@ function PreviewQuestionsByType() {
           inputStyle="ml-[10px]"
           placeholder="장문형"
           onChange={(e) => {
-            setValue(customFormNameContext?.formName ?? "", e.target.value);
-            trigger(customFormNameContext?.formName ?? "");
+            setValue(formNameContext?.formName ?? "", e.target.value);
+            trigger(formNameContext?.formName ?? "");
           }}
         />
       );
