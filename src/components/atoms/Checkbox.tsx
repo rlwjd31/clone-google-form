@@ -26,22 +26,25 @@ export default function Checkbox({
         onClick={disabled ? () => {} : onClick}
         {...others}
       >
-        <span
+        <div
           className={cn(
-            "z-10 col-start-1 row-start-1 size-5 border-2 border-neutral-400",
-            !disabled
-              ? isActivated
-                ? "animate-fillFromBorder border-0"
-                : "animate-emptyFromCenter border-2"
-              : ""
+            "z-10 relative col-start-1 translate-all row-start-1 size-5 border-2 border-neutral-400 overflow-hidden"
           )}
-        />
+        >
+          <div
+            className={cn(
+              "absolute left-1/2 top-1/2 size-8 transition-all duration-200 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-primary",
+              !disabled ? (isActivated ? "scale-100" : "scale-0") : ""
+            )}
+          />
+
+        </div>
         {!disabled && (
           <>
             <span
               className={cn(
-                "col-start-1 row-start-1 rounded-full size-10 group-hover:bg-purple-primary/15",
-                isActivated ? "animate-scaleUp" : "animate-scaleDown"
+                "col-start-1 row-start-1 rounded-full size-10 group-hover:bg-purple-primary/15 scale-0",
+                isActivated && "scale-100"
               )}
             />
             <div className={cn("z-20 col-start-1 row-start-1")}>
