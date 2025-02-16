@@ -7,6 +7,8 @@ import PreviewCheckboxGroup from "@/components/organisms/PreviewCheckboxGroup";
 import PreviewRadioGroup from "@/components/organisms/PreviewRadioGroup";
 import Dropdown from "@/components/organisms/Dropdown";
 import Icon from "@/components/atoms/Icon";
+import { useFormContext } from "react-hook-form";
+import { useCustomFormContext } from "@/store/CustomFormProvider";
 
 export default function PreviewQuestionsBlock() {
   const surveyId = useSurveyIdContext();
@@ -40,12 +42,30 @@ function PreviewQuestionsByType() {
   const { questionType, questions } = useSelector((state: GlobalState) => ({
     ...state.surveysState.find((survey) => survey.surveyId === surveyId)?.state,
   }));
+  const { setValue } = useFormContext();
+  const customFormNameContext = useCustomFormContext();
 
   switch (questionType) {
     case "short-text":
-      return <Input.Description inputStyle="ml-[10px]" placeholder="단답형" />;
+      return (
+        <Input.Description
+          inputStyle="ml-[10px]"
+          placeholder="단답형"
+          onChange={(e) =>
+            setValue(customFormNameContext?.formName ?? "", e.target.value)
+          }
+        />
+      );
     case "long-text":
-      return <Input.Description inputStyle="ml-[10px]" placeholder="장문형" />;
+      return (
+        <Input.Description
+          inputStyle="ml-[10px]"
+          placeholder="장문형"
+          onChange={(e) =>
+            setValue(customFormNameContext?.formName ?? "", e.target.value)
+          }
+        />
+      );
     case "check-box":
       return (
         <PreviewCheckboxGroup
