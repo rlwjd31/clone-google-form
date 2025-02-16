@@ -1,10 +1,12 @@
-import { useRef, useState, ComponentProps } from "react";
+import { useRef, useState, ComponentProps, useEffect } from "react";
 
 import Icon, { IconInfo, IconType } from "@/components/atoms/Icon";
 import { cn } from "@/utils/cn";
 import useClickOutside from "@/hooks/useClickOustside";
 import { QuestionType } from "@/types/question.type";
 import { OptionType } from "@/types/option.type";
+import { useFormContext } from "react-hook-form";
+import { useCustomFormContext } from "@/store/CustomFormProvider";
 
 const dropdownItemsContent: QuestionType[] = [
   "short-text",
@@ -30,10 +32,19 @@ export default function Dropdown({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDropdownValue, setSelectedDropdownValue] = useState<
-    QuestionType | OptionType
+    QuestionType | OptionType | string
   >(questionType ?? "short-text");
   const DROPDOWN_ITEM_HEIGHT = 48;
   useClickOutside(dropdownRef, () => setIsOpen(false));
+
+  const formContext = useFormContext();
+  const customFormName = useCustomFormContext();
+
+  useEffect(() => {
+    if (formContext && customFormName) {
+      formContext.setValue(customFormName.formName, selectedDropdownValue);
+    }
+  }, [selectedDropdownValue, formContext, customFormName]);
 
   if (!contents)
     return (
@@ -131,7 +142,7 @@ export default function Dropdown({
                   <DropdownItem
                     isActivated={selectedDropdownValue === content}
                     onClick={() => {
-                      setSelectedDropdownValue(content);
+                      setSelectedDropdownValue(content.value);
                       if (setValue) {
                         setValue({ ...content });
                       }

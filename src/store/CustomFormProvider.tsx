@@ -20,9 +20,6 @@ export const CustomFormProvider = ({
 
 export const useCustomFormContext = () => {
   const context = useContext(CustomFormContext);
-  if (!context)
-    throw new Error(
-      "useCustomFormProvider must be used within CustomFormProvider"
-    );
+    
   return context;
 };
