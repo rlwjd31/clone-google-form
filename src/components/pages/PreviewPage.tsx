@@ -97,6 +97,21 @@ export default function PreviewPage() {
               )}
             </section>
           </section>
+          {/* 설문지 하단 제출, 양식지우기 section */}
+          <section className="mb-12 flex items-center justify-between">
+            {/*  TODO: form validation 중일 시는 disabled로 제출을 막는 기능 구현 */}
+            <button
+              type="submit"
+              className="rounded-md bg-purple-primary px-8 py-3 text-white disabled:bg-neutral-400"
+              disabled={"" ? true : false}
+            >
+              제출
+            </button>
+            {/* TODO: 모든 form의 value들을 초기화하는 기능 구현 */}
+            <button type="button" className="text-purple-primary">
+              양식 지우기
+            </button>
+          </section>
           <DevTool control={control} />
         </form>
       </Layout>
