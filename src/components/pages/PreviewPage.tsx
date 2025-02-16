@@ -122,8 +122,11 @@ export default function PreviewPage() {
             >
               제출
             </button>
-            {/* TODO: 모든 form의 value들을 초기화하는 기능 구현 */}
-            <button type="button" className="text-purple-primary">
+            <button
+              type="button"
+              className="text-purple-primary"
+              onClick={() => window.location.reload()}
+            >
               양식 지우기
             </button>
           </section>
