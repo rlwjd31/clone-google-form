@@ -1,4 +1,5 @@
 import Input from "@/components/atoms/Input";
+import Layout from "@/components/Layout";
 import ButtonIcon from "@/components/molecules/ButtonIcon";
 import Card from "@/components/molecules/Card";
 import SurveyQuestionBlock from "@/components/templates/survey-question-block/SurveyQuestionBlock";
@@ -68,86 +69,93 @@ export default function SurveyPage() {
   };
 
   return (
-    <div className="relative flex w-full flex-col items-center gap-4 pb-10">
-      <AddSurveyButtonIcon
-        positionY={buttonY}
-        onClick={() => dispatch(addSurvey())}
-      />
-      <Card
-        className="relative w-full pb-6"
-        ref={cardRef}
-        isCardFocused={isCardFocused}
-        onClick={() => setIsCardFocused(true)}
-        draggable={false}
-      >
-        <div className="absolute left-0 top-0 z-20 h-3 w-full rounded-t-md bg-purple-primary" />
-        <div className="flex w-full flex-col gap-1">
-          <Input.Title
-            className={cn(
-              "mt-6",
-              !isCardFocused ? notFocusedInputStyle : focusedInputStyle
-            )}
-            placeholder="설문지 제목"
-            value={surveyTitle}
-            onChange={(e) => dispatch(setSurveyTitle(e.target.value))}
-          />
-          <Input.Description
-            className={cn(
-              !isCardFocused ? notFocusedInputStyle : focusedInputStyle
-            )}
-            placeholder="설문지 설명"
-            value={description}
-            onChange={(e) => dispatch(setDescription(e.target.value))}
-          />
-        </div>
-      </Card>
+    <Layout>
+      <div className="relative flex w-full flex-col items-center gap-4 pb-10">
+        <AddSurveyButtonIcon
+          positionY={buttonY}
+          onClick={() => dispatch(addSurvey())}
+        />
+        <Card
+          className="relative w-full pb-6"
+          ref={cardRef}
+          isCardFocused={isCardFocused}
+          onClick={() => setIsCardFocused(true)}
+          draggable={false}
+        >
+          <div className="absolute left-0 top-0 z-20 h-3 w-full rounded-t-md bg-purple-primary" />
+          <div className="flex w-full flex-col gap-1">
+            <Input.Title
+              className={cn(
+                "mt-6",
+                !isCardFocused ? notFocusedInputStyle : focusedInputStyle
+              )}
+              placeholder="설문지 제목"
+              value={surveyTitle}
+              onChange={(e) => dispatch(setSurveyTitle(e.target.value))}
+              onBlur={(e) => {
+                if (e.target.value === "") {
+                  dispatch(setSurveyTitle("제목 없는 설문지"));
+                }
+              }}
+            />
+            <Input.Description
+              className={cn(
+                !isCardFocused ? notFocusedInputStyle : focusedInputStyle
+              )}
+              placeholder="설문지 설명"
+              value={description}
+              onChange={(e) => dispatch(setDescription(e.target.value))}
+            />
+          </div>
+        </Card>
 
-      {/* Survey rendering영역 */}
-      <div className="relative flex w-full flex-col gap-4">
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="relative flex w-full flex-col gap-4"
-              >
-                {surveys.map(({ surveyId }, index) => (
-                  // draggableId와 key는 서로같아야한다.
-                  <Draggable
-                    draggableId={surveyId.toString()}
-                    index={index}
-                    key={surveyId.toString()}
-                  >
-                    {(provided) => (
-                      <div
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                      >
-                        {/* SurveyIdProvider가 아래 div보다 밖에 있으면 draggable하지 않음 */}
+        {/* Survey rendering영역 */}
+        <div className="relative flex w-full flex-col gap-4">
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="relative flex w-full flex-col gap-4"
+                >
+                  {surveys.map(({ surveyId }, index) => (
+                    // draggableId와 key는 서로같아야한다.
+                    <Draggable
+                      draggableId={surveyId.toString()}
+                      index={index}
+                      key={surveyId.toString()}
+                    >
+                      {(provided) => (
                         <div
-                          key={surveyId}
-                          ref={(element) => {
-                            surveyRefs.current[index] = element!;
-                          }}
-                          onClick={() => setButtonYPosition(index)}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          ref={provided.innerRef}
                         >
-                          <SurveyIdProvider surveyIdProp={surveyId}>
-                            <SurveyQuestionBlock />
-                          </SurveyIdProvider>
+                          {/* SurveyIdProvider가 아래 div보다 밖에 있으면 draggable하지 않음 */}
+                          <div
+                            key={surveyId}
+                            ref={(element) => {
+                              surveyRefs.current[index] = element!;
+                            }}
+                            onClick={() => setButtonYPosition(index)}
+                          >
+                            <SurveyIdProvider surveyIdProp={surveyId}>
+                              <SurveyQuestionBlock />
+                            </SurveyIdProvider>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
 
@@ -162,7 +170,7 @@ function AddSurveyButtonIcon({
     <div
       className="absolute right-0 top-0 z-50 transition-all duration-300 ease-in"
       style={{
-        transform: `translate(150%, ${positionY - 48}px)`, // * 버튼 높이 48px
+        transform: `translate(150%, ${positionY - 72}px)`, // * 버튼 높이 48px + header 높이 24
       }}
     >
       <ButtonIcon

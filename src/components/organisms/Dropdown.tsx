@@ -1,9 +1,12 @@
-import { useRef, useState, ComponentProps } from "react";
+import { useRef, useState, ComponentProps, useEffect } from "react";
 
 import Icon, { IconInfo, IconType } from "@/components/atoms/Icon";
 import { cn } from "@/utils/cn";
 import useClickOutside from "@/hooks/useClickOustside";
 import { QuestionType } from "@/types/question.type";
+import { OptionType } from "@/types/option.type";
+import { useFormContext } from "react-hook-form";
+import { useCustomFormContext } from "@/store/CustomFormProvider";
 
 const dropdownItemsContent: QuestionType[] = [
   "short-text",
@@ -16,8 +19,8 @@ const dropdownItemsContent: QuestionType[] = [
 type DropdownProps = ComponentProps<"div"> & {
   className?: string;
   questionType?: QuestionType;
-  contents?: string[];
-  setValue: (value: string | QuestionType) => void;
+  contents?: OptionType[];
+  setValue?: (value: OptionType | QuestionType) => void;
 };
 
 export default function Dropdown({
@@ -28,17 +31,34 @@ export default function Dropdown({
 }: DropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDropdownValue, setSelectedDropdownValue] =
-    useState<QuestionType | string>(questionType ?? "short-text");
+  const [selectedDropdownValue, setSelectedDropdownValue] = useState<
+    QuestionType | OptionType | string
+  >(contents ? "" : questionType ?? "short-text");
   const DROPDOWN_ITEM_HEIGHT = 48;
   useClickOutside(dropdownRef, () => setIsOpen(false));
+
+  const formContext = useFormContext();
+  const formNameContext = useCustomFormContext();
+
+  useEffect(() => {
+    if (formNameContext?.formName) {
+      formContext.setValue(formNameContext.formName, selectedDropdownValue);
+      formContext.trigger(formNameContext.formName);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedDropdownValue,
+    formContext?.setValue,
+    formContext?.trigger,
+    formNameContext?.formName,
+  ]);
 
   if (!contents)
     return (
       <div className={cn("relative w-fit", className)} ref={dropdownRef}>
         <div className="relative w-fit">
           <DropdownItem
-            className="border rounded-md border-neutral-300 bg-card hover:bg-card"
+            className="rounded-md border border-neutral-300 bg-card hover:bg-card"
             iconType={selectedDropdownValue as QuestionType}
             onClick={() => setIsOpen((prev) => !prev)}
           />
@@ -53,7 +73,7 @@ export default function Dropdown({
         </div>
         {isOpen && (
           <div
-            className="absolute z-20 py-2 border border-gray-300 rounded-md shadow-lg bg-card"
+            className="absolute z-20 rounded-md border border-gray-300 bg-card py-2 shadow-lg"
             style={{
               transform: `translateY(-${
                 (dropdownItemsContent.indexOf(
@@ -65,7 +85,7 @@ export default function Dropdown({
               }px)`,
             }}
           >
-            <ul className="flex flex-col w-full">
+            <ul className="flex w-full flex-col">
               {dropdownItemsContent.map((iconType, index) => {
                 return (
                   <li key={`${iconType}-${index}`}>
@@ -95,11 +115,7 @@ export default function Dropdown({
         <DropdownItem
           className="rounded-md border border-neutral-300 bg-card hover:bg-card [&_p]:text-neutral-600"
           onClick={() => setIsOpen((prev) => !prev)}
-          text={
-            selectedDropdownValue === "short-text"
-              ? "선택"
-              : selectedDropdownValue
-          }
+          text={(selectedDropdownValue as string) || "선택"}
         />
         <div
           className={cn(
@@ -112,29 +128,34 @@ export default function Dropdown({
       </div>
       {isOpen && (
         <div
-          className="absolute z-20 py-2 border border-gray-300 rounded-md shadow-lg bg-card"
+          className="absolute z-20 rounded-md border border-gray-300 bg-card py-2 shadow-lg"
           style={{
             transform: `translateY(-${
-              (contents.indexOf(selectedDropdownValue) + 1) *
+              (contents.findIndex(
+                (content) =>
+                  content.optionId ===
+                  (selectedDropdownValue as OptionType).optionId
+              ) +
+                1) *
                 DROPDOWN_ITEM_HEIGHT +
               10
             }px)`,
           }}
         >
-          <ul className="flex flex-col w-full">
+          <ul className="flex w-full flex-col">
             {contents.map((content, index) => {
               return (
                 <li key={`${content}-${index}`}>
                   <DropdownItem
                     isActivated={selectedDropdownValue === content}
                     onClick={() => {
-                      setSelectedDropdownValue(content);
+                      setSelectedDropdownValue(content.value);
                       if (setValue) {
-                        setValue(content);
+                        setValue({ ...content });
                       }
                       setIsOpen(false);
                     }}
-                    text={content}
+                    text={content.value}
                   />
                 </li>
               );

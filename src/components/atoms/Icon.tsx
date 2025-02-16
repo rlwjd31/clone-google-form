@@ -12,6 +12,8 @@ import AddCircle from "@/assets/icons/add-circle.svg?react";
 import Close from "@/assets/icons/close.svg?react";
 import DragIndicator from "@/assets/icons/drag-indicator.svg?react";
 import Check from "@/assets/icons/check.svg?react";
+import Preview from "@/assets/icons/preview.svg?react";
+import Error from "@/assets/icons/error.svg?react";
 
 export const IconInfo = {
   "short-text": {
@@ -68,6 +70,14 @@ export const IconInfo = {
   },
   check: {
     component: Check,
+    text: "",
+  },
+  preview: {
+    component: Preview,
+    text: "미리보기",
+  },
+  error: {
+    component: Error,
     text: "",
   },
 } as const;

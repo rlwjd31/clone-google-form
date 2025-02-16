@@ -1,6 +1,5 @@
 import Input from "@/components/atoms/Input";
 import CheckboxGroup from "@/components/organisms/CheckboxGroup";
-import Dropdown from "@/components/organisms/Dropdown";
 import DropdownGroup from "@/components/organisms/DropdownGroup";
 import RadioGroup from "@/components/organisms/RadioGroup";
 import { useSurveyIdContext } from "@/store/SurveyIdProvider";
@@ -67,13 +66,18 @@ export default function QuestionsByType({
 
   switch (questionType) {
     case "short-text":
-      return <Input.Description placeholder="단답형" disabled />;
+      return (
+        <Input.Description className="px-3" placeholder="단답형" disabled />
+      );
     case "long-text":
-      return <Input.Description placeholder="장문형" disabled />;
+      return (
+        <Input.Description className="px-3" placeholder="장문형" disabled />
+      );
     case "check-box":
       return (
         <CheckboxGroup
           className={cn(
+            "px-[6px]",
             !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
             className
           )}
@@ -87,6 +91,7 @@ export default function QuestionsByType({
       return (
         <RadioGroup
           className={cn(
+            "px-[6px]",
             !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
             className
           )}
@@ -97,10 +102,10 @@ export default function QuestionsByType({
         />
       );
     case "arrow-drop-down-circle":
-      // TODO: dropdown에 해당되는 UI구현
       return (
         <DropdownGroup
           className={cn(
+            "px-2",
             !isFocused && "[&_.input-underline-neutral]:hover:opacity-0",
             className
           )}

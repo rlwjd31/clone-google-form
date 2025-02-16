@@ -1,3 +1,4 @@
+import { OptionType } from "@/types/option.type";
 import { QuestionType } from "@/types/question.type";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -7,7 +8,7 @@ type Questions<T extends QuestionType> = T extends
   | "check-box"
   | "radio-button"
   | "dropdown"
-  ? Array<{ optionId: number; value: string }>
+  ? Array<OptionType>
   : undefined;
 
 export type SurveyState<T extends QuestionType> = {

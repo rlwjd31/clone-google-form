@@ -1,0 +1,108 @@
+import Input from "@/components/atoms/Input";
+import Card from "@/components/molecules/Card";
+import { useSurveyIdContext } from "@/store/SurveyIdProvider";
+import { GlobalState } from "@/store/surveys.slice";
+import { useSelector } from "react-redux";
+import PreviewCheckboxGroup from "@/components/organisms/PreviewCheckboxGroup";
+import PreviewRadioGroup from "@/components/organisms/PreviewRadioGroup";
+import Dropdown from "@/components/organisms/Dropdown";
+import Icon from "@/components/atoms/Icon";
+import { useFormContext } from "react-hook-form";
+import { useCustomFormContext } from "@/store/CustomFormProvider";
+import { cn } from "@/utils/cn";
+
+export default function PreviewQuestionsBlock() {
+  const surveyId = useSurveyIdContext();
+  const { questionTitle, isRequired } = useSelector((state: GlobalState) => ({
+    ...state.surveysState.find((survey) => survey.surveyId === surveyId)?.state,
+  }));
+  const {
+    formState: { errors },
+  } = useFormContext();
+  const formNameContext = useCustomFormContext();
+
+  const isValidationFailed = errors[formNameContext?.formName ?? ""];
+
+  return (
+    <Card
+      className={cn("pb-8", isValidationFailed && "ring-1 ring-red-primary")}
+    >
+      <div className="flex items-start gap-2 pt-4">
+        <div className="relative w-full">
+          <Input.SubTitle disabled value={questionTitle} inputStyle="px-2" />
+          {isRequired && (
+            <span className="absolute left-0 top-0 -translate-x-1 translate-y-4 text-lg text-red-600">
+              *
+            </span>
+          )}
+        </div>
+      </div>
+      <PreviewQuestionsByType />
+      {isValidationFailed && (
+        <div className="mt-6 flex gap-3">
+          <Icon type="error" />
+          <p className="text-red-primary">필수 질문입니다.</p>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function PreviewQuestionsByType() {
+  const surveyId = useSurveyIdContext();
+  const { questionType, questions } = useSelector((state: GlobalState) => ({
+    ...state.surveysState.find((survey) => survey.surveyId === surveyId)?.state,
+  }));
+  const { setValue, trigger } = useFormContext();
+  const formNameContext = useCustomFormContext();
+  const {
+    formState: { errors },
+  } = useFormContext();
+
+  const isValidationFailed = errors[formNameContext?.formName ?? ""];
+  const textErrorStyle = cn(
+    "ml-2",
+    isValidationFailed &&
+      "[&_.input-underline-neutral]:bg-red-primary [&_.input-underline-purple]:bg-red-primary"
+  );
+
+  switch (questionType) {
+    case "short-text":
+      return (
+        <Input.Description
+          className={textErrorStyle}
+          placeholder="단답형"
+          onChange={(e) => {
+            setValue(formNameContext?.formName ?? "", e.target.value);
+            trigger(formNameContext?.formName ?? "");
+          }}
+        />
+      );
+    case "long-text":
+      return (
+        <Input.Description
+          className="ml-2"
+          placeholder="장문형"
+          onChange={(e) => {
+            setValue(formNameContext?.formName ?? "", e.target.value);
+            trigger(formNameContext?.formName ?? "");
+          }}
+        />
+      );
+    case "check-box":
+      return (
+        <PreviewCheckboxGroup
+          options={!Array.isArray(questions) ? [] : questions}
+        />
+      );
+    case "radio-button":
+      return (
+        <PreviewRadioGroup
+          options={!Array.isArray(questions) ? [] : questions}
+        />
+      );
+    case "arrow-drop-down-circle":
+      return <Dropdown className="ml-1" contents={questions} />;
+  }
+  return <div>해당 질문 종류는 존재하지 않습니다.</div>;
+}
