@@ -48,14 +48,18 @@ const createInitialSurveyState = <T extends QuestionType>(
   type: T
 ): SurveyState<T> => {
   return {
-    lastOptionNumber: 1,
+    lastOptionNumber: 3,
     questionTitle: "",
     questions: ([
       "check-box",
       "radio-button",
       "arrow-drop-down-circle",
     ].includes(type)
-      ? [{ optionId: 1, value: "옵션 1" }]
+      ? [
+          { optionId: 1, value: "옵션 1" },
+          { optionId: 2, value: "옵션 2" },
+          { optionId: 3, value: "옵션 3" },
+        ]
       : undefined) as Questions<T>,
     questionType: type,
     isRequired: false,
@@ -65,7 +69,7 @@ const createInitialSurveyState = <T extends QuestionType>(
 const createInitialSurveysState = (
   questionType: QuestionType
 ): SurveysState => ({
-  lastSurveyId: 1,
+  lastSurveyId: 5,
   surveyTitle: "제목 없는 설문지",
   description: "설문지 설명",
   surveysState: [
@@ -74,6 +78,26 @@ const createInitialSurveysState = (
       state: createInitialSurveyState(
         questionType
       ) as SurveyState<QuestionType>,
+    },
+    {
+      surveyId: 2,
+      state: createInitialSurveyState("check-box") as SurveyState<QuestionType>,
+    },
+    {
+      surveyId: 3,
+      state: createInitialSurveyState(
+        "arrow-drop-down-circle"
+      ) as SurveyState<QuestionType>,
+    },
+    {
+      surveyId: 4,
+      state: createInitialSurveyState(
+        "short-text"
+      ) as SurveyState<QuestionType>,
+    },
+    {
+      surveyId: 5,
+      state: createInitialSurveyState("long-text") as SurveyState<QuestionType>,
     },
   ],
 });

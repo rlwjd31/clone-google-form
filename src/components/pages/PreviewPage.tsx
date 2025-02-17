@@ -22,7 +22,7 @@ export default function PreviewPage() {
   }));
   const navigate = useNavigate();
   const formMethods = useForm({
-    mode: "all",
+    mode: "onSubmit",
     defaultValues: {
       ...surveys.map(({ surveyId, state: { questionType } }) => ({
         [createFormName({ surveyId, questionType })]:
